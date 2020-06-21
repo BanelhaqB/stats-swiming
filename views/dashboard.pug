@@ -1,0 +1,28 @@
+extends base
+
+block content
+    main.flash.dashboard
+        h3.dashboard__heading Tableau de bord
+        .card-me__container
+            a.card-me(href='/me')
+                svg.card-me__icon
+                    use(href='img/sprite.svg#icon-users')
+                span.card-me__heading Profil
+            a.card-me(href='#')
+                svg.card-me__icon
+                    use(href='img/sprite.svg#icon-chronometer')
+                span.card-me__heading Statistiques personnelles
+            if ((user.role === 'teacher') || (user.role === 'teacher-admin'))
+                a.card-me(href=`/students/${user.id}`)
+                    svg.card-me__icon
+                        use(href='img/sprite.svg#icon-document-list')
+                    span.card-me__heading Listes &Eacute;l&egrave;ves
+                a.card-me(href='#')
+                    svg.card-me__icon
+                        use(href='img/sprite.svg#icon-inbox-document-text')
+                    span.card-me__heading Groupes
+            if ((user.role === 'admin') || (user.role === 'teacher-admin'))
+                a.card-me(href='#')
+                    svg.card-me__icon
+                        use(href='img/sprite.svg#icon-box-filled')
+                    span.card-me__heading Gestion des utilisateurs

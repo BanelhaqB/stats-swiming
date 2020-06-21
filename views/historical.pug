@@ -1,0 +1,96 @@
+extends base
+
+mixin navItem(link,text,icon,active)
+    li(class=`${active ? 'side-nav--active':''}`)
+        a(href=`${link}`)
+            svg
+                use(xlink:href=`img/sprite.svg#icon-${icon}`)
+            | #{text}
+
+block content
+    main.main
+        .user-view
+            nav.user-view__menu
+                ul.side-nav
+                    +navItem('/me','Profil','users')
+                    +navItem('/historical','Historique','note-list', true)
+                    +navItem('/statistics','Statistiques','stop-watch')
+
+                - if(user.role === 'teacher' || user.role === 'teacher-admin')
+                    .admin-nav
+                        h5.admin-nav__heading Professeur
+                        ul.side-nav
+                            +navItem(`/students/${user.id}`,'Liste élèves','folder-information')
+                            +navItem('#','Groupes','users')
+
+                - if(user.role === 'admin' || user.role === 'teacher-admin')
+                    .admin-nav
+                        h5.admin-nav__heading Admin
+                        ul.side-nav
+                            +navItem('/manageUsers','Gestion des utilisateurs','data')
+                
+                .admin-nav
+                        h5.admin-nav__heading Filtres
+                        form.form__filter-races
+                            select#distance.form__input.filter__item(name="distance")
+                                option(value='50') 50m
+                                option(value='100') 100m
+                                option(value='200') 200m
+                                option(value='400') 400m
+                                option(value='800') 800m
+                                option(value='1500') 1500m
+                                option(value='4100') 4x100m
+                                option(value='4200') 4x200m
+                            select#name.form__input.filter__item(name="name")
+                                option(value='nage libre') nage libre
+                                option(value='dos') dos
+                                option(value='brasse') brasse
+                                option(value='papillon') papillon
+                                option(value='4 nages') 4 nages
+                                option(value='relais nage libre') relais nage libre
+                                option(value='relais 4 nages') relais 4 nages
+                            select#size.form__input.filter__item(name="size")
+                                option(value='1') Tout Bassin
+                                option(value='25') 25 mètres
+                                option(value='50') 50 mètres
+                            input#season.form__input.filter__item(type="number", placeholder="Saison")
+                            
+                            a.btn-me-secondary-me-white.u-center-item.u-margin-top-medium.racesFilterBtn Appliquer les filtres &rarr;
+
+
+            .user-view__content
+                .manageUsers__container
+                    h2.heading-secondary.ma-bt-md Historique
+                    .search
+                        input#search_name.search__input(type='text', placeholder='Rechercher une course')
+                        button.search__button
+                            svg.search__icon
+                                use(xlink:href='img/sprite.svg#icon-magnifying-glass')
+                        a.btn-me-secondary-me.u-margin-left-medium.racesFilterBtn Tout afficher &rarr;
+                    table.list.u-margin-top-medium
+                        thead.list__head
+                            tr
+                                td Distance
+                                td Nage
+                                td Bassin
+                                td Temps
+                                td Lieu
+                                td Date
+                                td Saison
+                        tbody
+                            each race in races
+                                tr.list__item
+                                    td= `${race.races.race.distance}m`
+                                    td.list__item-name #{race.races.race.name}
+                                    td #{race.races.size}
+                                    - const time = `${Math.trunc(race.races.time/60)}'${Math.round(((race.races.time-Math.trunc(race.races.time/60)*60)*100))/100}`; 
+                                        td #{time}
+                                    td #{race.races.place}
+                                    - const date = `${race.races.date.getUTCDate()}/${race.races.date.getMonth()+1}/${race.races.date.getFullYear()}`
+                                    td #{date}
+                                    td #{race.races.season}
+                    .pagination              
+                        if page !== 1
+                            a#prevPage.btn-me-secondary-me.pagination__btn= `← Page ${page - 1}`
+                        if results === 10 && results !== 0
+                            a#nextPage.btn-me-secondary-me.pagination__btn= `Page ${page + 1} →`

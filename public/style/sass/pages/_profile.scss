@@ -1,0 +1,21 @@
+.profile__container {
+    height: 70vh;
+    width: 70%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-card {
+        width: 40% !important;
+        max-width: 100vw !important;
+        height: 40rem;
+    }
+
+    &-heading {
+        font-family: "Lato", sans-serif !important;
+        font-weight: 400 !important;
+        line-height: 1.7 !important;
+        font-size: 2rem;
+    }
+}

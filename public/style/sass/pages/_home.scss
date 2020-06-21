@@ -1,0 +1,40 @@
+.index {
+  margin-top: 0;
+}
+
+.home {
+  position: relative;
+  &__img {
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    font-size: 1.5rem;
+    animation-name: moveInBottom;
+    animation-duration: 5s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: infinite;
+
+    &--title {
+      color: $color-white;
+      font-weight: 800;
+      letter-spacing: 10px;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    &--description {
+      font-size: 1rem;
+      color: $color-white;
+      font-weight: 600;
+      letter-spacing: 5px;
+      font-family: 'Open Sans', sans-serif;
+    }
+  }
+}

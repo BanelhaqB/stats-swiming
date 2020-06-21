@@ -1,0 +1,103 @@
+extends base
+
+mixin navItem(link,text,icon,active)
+    li(class=`${active ? 'side-nav--active':''}`)
+        a(href=`${link}`)
+            svg
+                use(xlink:href=`img/sprite.svg#icon-${icon}`)
+            | #{text}
+
+block content
+    main.main
+        .user-view
+            nav.user-view__menu
+                ul.side-nav
+                    if userAccountData
+                        +navItem('/me','Profil','users')
+                    else
+                        +navItem('/me','Profil','users',true)
+                    +navItem('/historical','Historique','note-list')
+                    +navItem('/statistics','Statistiques','stop-watch')
+
+                - if(user.role === 'teacher' || user.role === 'teacher-admin')
+                    .admin-nav
+                        h5.admin-nav__heading Professeur
+                        ul.side-nav
+                            +navItem(`/students/${user._id}`,'Liste élèves','folder-information')
+                            +navItem('#','Groupes','users')
+
+                - if(user.role === 'admin' || user.role === 'teacher-admin')
+                    .admin-nav
+                        h5.admin-nav__heading Admin
+                        ul.side-nav
+                            if userAccountData
+                                +navItem('/manageUsers','Gestion des utilisateurs','data', true)
+                            else
+                                +navItem('/manageUsers','Gestion des utilisateurs','data')
+
+            .user-view__content
+                .user-view__form-container
+                    h2.heading-secondary.ma-bt-md= `${!userAccountData ? 'Votre Profil' : 'Mise à jour du profil'}`
+                    //- form.form.form-user-data(action='/submit-user-data' method='POST' enctype='multipart/form-data') //- -- Without API
+                    form.form.form-user-data
+                        .form__group
+                            label.form__label(for='name') Prénom
+                            - const firstname = userAccountData ? `${userAccountData.firstName.charAt(0).toUpperCase()}${userAccountData.firstName.substring(1).toLowerCase()}` : `${user.firstName.charAt(0).toUpperCase()}${user.firstName.substring(1).toLowerCase()}`
+                            input#firstname.form__input(type='text', value=`${firstname}`, required, name='firstname')
+                        .form__group
+                            label.form__label(for='name') Nom
+                            input#lastname.form__input(type='text', value=`${userAccountData ? userAccountData.lastName.toUpperCase() : user.lastName.toUpperCase()}`, required, name='lastname')
+                        .form__group
+                            label.form__label(for='name') Année de naissance
+                            input#birthYear.form__input(type='number', value=`${userAccountData ? userAccountData.birthYear : user.birthYear}`, required, name='birthYear')
+                        .form__group
+                            label.form__label(for='name') Professeur
+
+                            //- - if (!userAccountData) {const teacher = user.teacher ? `${user.teacher.firstName.charAt(0).toUpperCase()}${user.teacher.firstName.substring(1).toLowerCase()} ${user.teacher.lastName.toUpperCase()}` : 'Pas renseigné'} else {const teacher = user.teacher ? `${userAccountData.teacher.firstName.charAt(0).toUpperCase()}${userAccountData.teacher.firstName.substring(1).toLowerCase()} ${userAccountData.teacher.lastName.toUpperCase()}` : 'Pas renseigné'}
+                            select#teacher.form__input(name="teacher", value=`${teacher}`, required)
+                                if !userAccountData
+                                    if !user.teacher
+                                        option(value='-1') Non renseigné
+                                    else
+                                        option(value=`${user.teacher._id}`)= `${user.teacher.firstName.charAt(0).toUpperCase()}${user.teacher.firstName.substring(1).toLowerCase()} ${user.teacher.lastName.toUpperCase()}`
+                                    each teacher in teachers
+                                        option(value=`${teacher._id}`)= `${teacher.firstName.charAt(0).toUpperCase()}${teacher.firstName.substring(1).toLowerCase()} ${teacher.lastName.toUpperCase()}`
+                                else
+                                    if !userAccountData.teacher
+                                        option(value='-1') Non renseigné
+                                    else
+                                        option(value=`${userAccountData.teacher._id}`)= `${userAccountData.teacher.firstName.charAt(0).toUpperCase()}${userAccountData.teacher.firstName.substring(1).toLowerCase()} ${userAccountData.teacher.lastName.toUpperCase()}`
+                                    each teacher in teachers
+                                        option(value=`${teacher._id}`)= `${teacher.firstName.charAt(0).toUpperCase()}${teacher.firstName.substring(1).toLowerCase()} ${teacher.lastName.toUpperCase()}`
+                        .form__group.ma-bt-md
+                            label.form__label(for='email') Adresse email
+                            input#email.form__input(type='email', value=`${userAccountData ? userAccountData.email : user.email}`, required, name='email')
+                        if userAccount
+                            .form__group.ma-bt-md
+                                label.form__label(for='role') Poste
+                                select#role.form__input(name="role", value=`${userAccountData ? userAccountData.role : user.role}`, required)
+                                    option(value='user') Élève
+                                    option(value='teacher') Professeur
+                                    option(value='admin') Administrateur
+                                    option(value='teacher-admin') Professeur / Admin
+                        .form__group(style='display: flex; justify-content: space-between;')
+                            if userAccount
+                                button(type="submit",style="background-color: #d63031;")#deleteBtn.btn.btn--small.btn--green Supprimer
+                            button(type="submit").btn.btn--small.btn--green Enregistrer
+
+                if !userAccount
+                    .line &nbsp;
+                    .user-view__form-container
+                        h2.heading-secondary.ma-bt-md Changement de mot de passe
+                        form.form.form-user-password
+                            .form__group
+                                label.form__label(for='password-current') Mot de passe actuel
+                                input#password-current.form__input(type='password', placeholder='••••••••', required, minlength='8')
+                            .form__group
+                                label.form__label(for='password') Nouveau mot de passe
+                                input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
+                            .form__group.ma-bt-lg
+                                label.form__label(for='password-confirm') Confirmez votre mot de passe
+                                input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
+                            .form__group.right
+                                button.btn.btn--small.btn--green#btn--save-password Enregistrer

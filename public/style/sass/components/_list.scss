@@ -1,0 +1,79 @@
+.list {
+  width: 100%;
+
+  &__head {
+    text-transform: uppercase;
+    color: $color-grey-dark-2;
+    font-weight: 600;
+  }
+
+  &__item {
+    height: 5rem;
+    background-color: #fff;
+
+    &:hover {
+      transform: scale(1.02);
+      transition: 0.1s;
+    }
+
+    &-name {
+      font-weight: 400;
+    }
+
+    &-admin {
+      text-align: center;
+      font-weight: bold;
+      color: #ff7675;
+      background-color: rgba($color: #ff7675, $alpha: 0.5);
+      border-radius: 5rem;
+      width: 10rem;
+      height: 2rem;
+    }
+    &-teacher {
+      text-align: center;
+      font-weight: bold;
+      color: #81ecec;
+      background-color: rgba($color: #81ecec, $alpha: 0.5);
+      border-radius: 5rem;
+      width: 10rem;
+      height: 2rem;
+    }
+    &-teacher-admin {
+      text-align: center;
+      font-weight: bold;
+      color: #636e72;
+      background-color: rgba($color: #636e72, $alpha: 0.5);
+      border-radius: 5rem;
+      width: 10rem;
+      height: 2rem;
+    }
+    &-user {
+      text-align: center;
+      font-weight: bold;
+      color: #55efc4;
+      background-color: rgba($color: #55efc4, $alpha: 0.5);
+      border-radius: 5rem;
+      width: 10rem;
+      height: 2rem;
+    }
+  }
+}
+
+table,
+th,
+td {
+  border: none;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0 1rem;
+}
+
+.filter {
+  &__item {
+    width: 60% !important;
+    margin: 2rem auto;
+    margin-bottom: 0;
+  }
+}

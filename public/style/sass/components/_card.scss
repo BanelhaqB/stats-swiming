@@ -1,0 +1,64 @@
+.card-me {
+  &,
+  &:link,
+  &:visited {
+    height: 25rem;
+    width: 25rem;
+    padding: 4rem;
+    margin-top: 2rem;
+    border-radius: 3px;
+    border: solid #b2bec3 1px;
+    box-shadow: 0 4px 10px 0 rgba(35, 46, 105, 0.1);
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    color: $color-grey-dark;
+    font-size: 2rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 700;
+
+    animation-name: moveInRigth;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+  }
+
+  &__container {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    margin: 4rem 0;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__icon {
+    height: 6rem;
+    width: 6rem;
+    display: inline-block;
+    fill: $color-secondary-dark;
+  }
+
+  &__heading {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  &:hover {
+    transform: translateY(-0.3rem);
+    box-shadow: $box-shadow-medium;
+    border-color: $color-secondary-light;
+
+    &::after {
+      transform: scaleX(1.4) scaleY(1.6);
+      opacity: 0;
+    }
+  }
+
+  &:not(:last-child) {
+    margin-right: 3rem;
+  }
+}

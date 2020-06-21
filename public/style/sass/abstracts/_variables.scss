@@ -1,0 +1,31 @@
+//COLORS
+$color-primary: #333;
+$color-primary-light: #333;
+$color-primary-dark: #333;
+
+$color-secondary-light: #84c2ff;
+$color-secondary-dark: #0984e3;
+$color-secondary-dark-2: #006cbe;
+
+$color-tertiary-light: #81ecec;
+$color-tertiary-dark: #00cec9;
+
+$color-grey-light-1: #eeeeee;
+$color-grey-light-2: rgb(209, 209, 209);
+$color-grey-dark: #777;
+$color-grey-dark-2: #999;
+$color-grey-dark-3: #333;
+
+$color-white: #fff;
+$color-black: #000;
+
+//BOX-SHADOW
+$box-shadow-light: 0 1rem 3rem rgba($color-black, 0.1);
+$box-shadow-medium: 0 1rem 2rem rgba($color-black, 0.2);
+$box-shadow-dark: 0 2.5rem 4rem rgba($color-black, 0.5);
+
+//FONT
+$default-font-size: 1.6rem;
+
+//LAYOUT
+$header-height: 8rem;

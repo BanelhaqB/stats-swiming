@@ -1,0 +1,100 @@
+extends base
+
+mixin navItem(link,text,icon,active)
+    li(class=`${active ? 'side-nav--active':''}`)
+        a(href=`${link}`)
+            svg
+                use(xlink:href=`img/sprite.svg#icon-${icon}`)
+            | #{text}
+
+block content
+    main.main
+        .user-view
+            nav.user-view__menu
+                ul.side-nav
+                    +navItem('/me','Profil','users')
+                    +navItem('/historical','Historique','note-list')
+                    +navItem(`/students/${user.id}`,'Statistiques','stop-watch')
+
+                - if(user.role === 'teacher' || user.role === 'teacher-admin')
+                    .admin-nav
+                        h5.admin-nav__heading Professeur
+                        ul.side-nav
+                            +navItem('/students','Liste élèves','folder-information')
+                            +navItem('#','Groupes','users')
+
+                - if(user.role === 'admin' || user.role === 'teacher-admin')
+                    .admin-nav
+                        h5.admin-nav__heading Admin
+                        ul.side-nav
+                            +navItem('/manageUsers','Gestion des utilisateurs','data', true)
+                
+                .admin-nav
+                        h5.admin-nav__heading Filtres
+                        form.form__filter-users
+                            select#role.form__input.filter__item(name="role")
+                                option(value='1') Tout stauts
+                                option(value='user') Élève
+                                option(value='teacher') Professeur
+                                option(value='admin') Administrateur
+                                option(value='teacher-admin') Professeur / Admin
+                            select#sex.form__input.filter__item(name="sex")
+                                option(value='1') Tout sexe
+                                option(value='M') Homme
+                                option(value='F') Femme
+                            select#teacher.form__input.filter__item(name="teacher")
+                                    option(value='1') Tout Professeur
+                                    each teacher in teachers
+                                        option(value=`${teacher._id}`)= `${teacher.firstName.charAt(0).toUpperCase()}${teacher.firstName.substring(1).toLowerCase()} ${teacher.lastName.toUpperCase()}`
+                            input#birthYear.form__input.filter__item(type="number", placeholder="Année de naissance")
+                            
+                            a.btn-me-secondary-me-white.u-center-item.u-margin-top-medium.submitFilters Appliquer les filtres &rarr;
+
+
+            .user-view__content
+                .manageUsers__container
+                    h2.heading-secondary.ma-bt-md Gestion des utilisateurs
+                    .search
+                        input#search_name.search__input(type='text', placeholder='Rechercher utilisateurs')
+                        button.search__button
+                            svg.search__icon
+                                use(xlink:href='img/sprite.svg#icon-magnifying-glass')
+                        a.btn-me-secondary-me.u-margin-left-medium.submitFilters Tout afficher &rarr;
+                    table.list.u-margin-top-medium
+                        thead.list__head
+                            tr
+                                td Nom
+                                td Sexe
+                                td Email
+                                td Année de naissance
+                                td Status
+                                td 
+                        tbody
+                            each user in users
+                                tr.list__item
+                                    td.list__item-name= `${user.firstName.charAt(0).toUpperCase()}${user.firstName.substring(1).toLowerCase()} ${user.lastName.toUpperCase()}`
+                                    td #{user.sex === 'F' ? 'Femme' : 'Homme'}
+                                    td #{user.email}
+                                    td #{user.birthYear}
+                                    td
+                                        div(class=`list__item-${user.role}`)
+                                            if user.role === 'user'
+                                                p Élève
+                                            if user.role === 'teacher'
+                                                p Professeur
+                                            if user.role === 'admin'
+                                                p Administrateur
+                                            if user.role === 'teacher-admin'
+                                                p Professeur / Admin
+                                    td      
+                                        a(href=`account/${user._id}`)
+                                            svg.search__icon
+                                                use(xlink:href='img/sprite.svg#icon-adjustments')
+                    .pagination              
+                        if page !== 1
+                            a#prevPage.btn-me-secondary-me.pagination__btn= `← Page ${page - 1}`
+                        if results === 10 && results !== 0
+                            a#nextPage.btn-me-secondary-me.pagination__btn= `Page ${page + 1} →`
+
+                                              
+

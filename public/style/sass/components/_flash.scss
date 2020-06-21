@@ -1,0 +1,10 @@
+.flash {
+    margin-top: 5rem;
+    display: flex;
+    justify-content: center;
+
+    &__msg {
+        width: 100% !important;
+        text-align: center;
+    }
+}

@@ -1,0 +1,106 @@
+extends base
+
+mixin navItem(link,text,icon,active)
+    li(class=`${active ? 'side-nav--active':''}`)
+        a(href=`${link}`)
+            svg
+                use(xlink:href=`img/sprite.svg#icon-${icon}`)
+            | #{text}
+
+block content
+    main.main
+        .user-view
+            nav.user-view__menu
+                ul.side-nav
+                    +navItem('/me','Profil','users')
+                    +navItem('/historical','Historique','note-list')
+                    +navItem('/statistics','Statistiques','stop-watch', true)
+
+                - if(user.role === 'teacher' || user.role === 'teacher-admin')
+                    .admin-nav
+                        h5.admin-nav__heading Professeur
+                        ul.side-nav
+                            +navItem(`/students/${user.id}`,'Liste élèves','folder-information')
+                            +navItem('#','Groupes','users')
+
+                - if(user.role === 'admin' || user.role === 'teacher-admin')
+                    .admin-nav
+                        h5.admin-nav__heading Admin
+                        ul.side-nav
+                            +navItem('/manageUsers','Gestion des utilisateurs','data')
+
+                .admin-nav
+                    h5.admin-nav__heading Selection
+                    form.form__filter-users
+                        select#distance.form__input.filter__item(name="distance")
+                            option(value='50') 50m
+                            option(value='100') 100m
+                            option(value='200') 200m
+                            option(value='400') 400m
+                            option(value='800') 800m
+                            option(value='1500') 1500m
+                            option(value='4100') 4x100m
+                            option(value='4200') 4x200m
+                        select#name.form__input.filter__item(name="name")
+                            option(value='nage libre') nage libre
+                            option(value='dos') dos
+                            option(value='brasse') brasse
+                            option(value='papillon') papillon
+                            option(value='4 nages') 4 nages
+                            option(value='relais nage libre') relais nage libre
+                            option(value='relais 4 nages') relais 4 nages
+                        a#getPersonalStats.btn-me-secondary-me-white.u-center-item.u-margin-top-medium.submitFilters Valider &rarr;
+                .admin-nav
+                    h5.admin-nav__heading Comparaison
+                    select#compareBy.form__input.filter__item(name="compareBy")
+                        option(value='sex') Sexe
+                        option(value='group') Groupe
+                        option(value='age') Âge
+
+                    a#getCompareStatsBtn.btn-me-secondary-me-white.u-center-item.u-margin-top-medium Valider &rarr;
+
+
+            .user-view__content
+                .manageUsers__container
+                    h2.heading-secondary.ma-bt-md Statistiques
+                    .stats
+                        .stats__graph
+                            canvas#myChart 
+                            //- script const ctx = document.getElementById('myChart').getContext('2d');const chart = () => new Chart(ctx, { type: 'line',data: {labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],datasets: [{label: `${stats.race.name}`,borderColor: '#81ecec',data: [0, 10, 5, 2, 20, 30, 45]}]}}); window.onload = chart;
+
+                        .stats__card
+                            .stats__card-header 
+                                span.stats__card-header--name Célia
+                                span#nameRace.stats__card-header--race --
+                            .stats__card-body
+                                ul.stats__card-body--list
+                                    li#nbRatings Nombre de course:  --
+                                    li#avg Temps moyen:  -- 
+                                    li#med Médiane:  --
+                                    li#fstQ 1er Quartiles:  -- 
+                                    li#trdQ 3ème Quartiles:  --
+                                    li#max Reccord:  -- 
+                                    li#min Minimum:  --
+                    .stats
+                        .stats__graph
+                            canvas#myChart2 
+                            //- script const ctx = document.getElementById('myChart').getContext('2d');const chart = () => new Chart(ctx, { type: 'line',data: {labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],datasets: [{label: `${stats.race.name}`,borderColor: '#81ecec',data: [0, 10, 5, 2, 20, 30, 45]}]}}); window.onload = chart;
+
+                    //-     .stats__card
+                    //-         .stats__card-header 
+                    //-             span.stats__card-header--name #{stats.compareBy}
+                    //-             span.stats__card-header--race= `${stats.race.distance} ${stats.race.name}`
+                    //-         .stats__card-body
+                    //-             ul.stats__card-body--list
+                    //-                 li= `Nombre de course:  ${stats.statsByComapare[0].numRankings}`
+                    //-                 - const avgCompare = `${Math.trunc(stats.statsByComapare[0].avgRaking/60)}'${(Math.round(((stats.statsByComapare[0].avgRaking-Math.trunc(stats.statsByComapare[0].avgRaking/60)*60)*100))/100).toString().split('.')[0]}"${(Math.round(((stats.statsByComapare[0].avgRaking-Math.trunc(stats.statsByComapare[0].avgRaking/60)*60)*100))/100).toString().split('.')[1]}`; 
+                    //-                 li= `Temps moyen:  ${avg}`
+                    //-                 - const maxCompare = `${Math.trunc(stats.statsByComapare[0].minRaking/60)}'${(Math.round(((stats.statsByComapare[0].minRaking-Math.trunc(stats.statsByComapare[0].minRaking/60)*60)*100))/100).toString().split('.')[0]}"${(Math.round(((stats.statsByComapare[0].minRaking-Math.trunc(stats.statsByComapare[0].minRaking/60)*60)*100))/100).toString().split('.')[1]}`;
+                    //-                 li= `Reccord:  ${max}` 
+                    //-                 - const minCompare = `${Math.trunc(stats.statsByComapare[0].maxRaking/60)}'${(Math.round(((stats.statsByComapare[0].maxRaking-Math.trunc(stats.statsByComapare[0].maxRaking/60)*60)*100))/100).toString().split('.')[0]}"${(Math.round(((stats.statsByComapare[0].maxRaking-Math.trunc(stats.statsByComapare[0].maxRaking/60)*60)*100))/100).toString().split('.')[1]}`;
+                    //-                 li= `Minimum:  ${min}` 
+
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js')
+    script.
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const chart = () => new Chart(ctx, { type: 'line',data: {labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],datasets: [{label: `Test`,borderColor: '#81ecec',data: [0, 10, 5, 2, 20, 30, 45]}]}});
