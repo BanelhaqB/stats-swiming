@@ -14,6 +14,7 @@ router.get(
 
 router.get('/', raceController.getAllRaces);
 router.get('/:studentId', raceController.getAllRaces);
+router.get('/progress/:race', raceController.progress);
 
 // router.patch('/addRace', raceController.createRace);
 // router.patch('/addRace/:studentId', raceController.createRace);

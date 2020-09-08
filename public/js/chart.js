@@ -23,12 +23,12 @@ export const getPersonalStats = async (distance, name, compareBy, student) => {
   if (student) {
     res = await axios({
       method: 'GET',
-      url: `http://127.0.0.1:8080/api/v1/races/stats/${distance}/${name}/${compareBy}/${student}`
+      url: `http://localhost:8080/api/v1/races/stats/${distance}/${name}/${compareBy}/${student}`
     });
   } else {
     res = await axios({
       method: 'GET',
-      url: `http://127.0.0.1:8080/api/v1/races/stats/${distance}/${name}/${compareBy}`
+      url: `http://localhost:8080/api/v1/races/stats/${distance}/${name}/${compareBy}`
     });
   }
   console.log(res);
@@ -271,14 +271,14 @@ export const getPersonalStats = async (distance, name, compareBy, student) => {
       labels: labelsCompare,
       datasets: [
         {
-          label: `${compareBy}`,
+          label: `Moyenne`,
           borderColor: '#81ecec',
           backgroundColor: ['transparent'],
           borderWidth: 1,
           data: dataCompare
         },
         {
-          label: `Moyenne`,
+          label: `Perso`,
           borderColor: '#74b9ff',
           backgroundColor: ['transparent'],
           borderWidth: 1,
@@ -297,6 +297,46 @@ export const getPersonalStats = async (distance, name, compareBy, student) => {
           backgroundColor: ['transparent'],
           borderWidth: 1,
           data: dataCompareMin
+        }
+      ]
+    },
+
+    // Configuration options go here
+    options: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: false,
+              callback: function(value, index, values) {
+                return sectomin2(value);
+              }
+            }
+          }
+        ]
+      }
+    }
+  });
+
+  var ctx3 = document.getElementById('myChart3').getContext('2d');
+
+  const prog = res.data.data.progress.map(el => el.time);
+  const seasonProg = res.data.data.progress.map(el => el.season);
+  console.log(prog, seasonProg);
+  var chart = new Chart(ctx3, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+      labels: seasonProg,
+      datasets: [
+        {
+          label: `${distance} ${name}`,
+          borderColor: '#81ecec',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: prog
         }
       ]
     },

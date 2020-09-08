@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-plusplus */
 const multer = require('multer');
 const fs = require('fs');
 const csv = require('csv-parser');
@@ -105,6 +107,22 @@ const groupRacesByUser = async () => {
       races: user
     };
   });
+  // console.log(userGrouped);
+};
+
+const getCategory = (sex, age) => {
+  if (sex === 'F') {
+    if (age <= 10) return 'avenir';
+    if (age <= 13) return 'jeune';
+    if (age <= 17) return 'junior';
+    if (age >= 18) return 'senior';
+  }
+  if (sex === 'M') {
+    if (age <= 11) return 'avenir';
+    if (age <= 14) return 'jeune';
+    if (age <= 18) return 'junior';
+    if (age >= 19) return 'senior';
+  }
 };
 
 //***************** Convert CSV to JSON *****************
@@ -118,8 +136,57 @@ const convertCSVToJSON = function(file) {
         separator: ';'
       })
     )
-    .on('data', data => users.push(data))
-    .on('end', groupRacesByUser);
+    .on('data', data => {
+      data.age = data.season - data.birthYear;
+      data.category = getCategory(data.sex, data.age);
+      // console.log(data);
+      users.push(data);
+    })
+    .on('end', async () => {
+      await groupRacesByUser();
+      // console.log(users[0].races);
+    });
+};
+
+const addRecord = async (req, res, next) => {
+  const allUsers = await factory.getAll(Users, req, '++');
+  for await (user of allUsers) {
+    const map = new Map();
+
+    user.races.forEach(race => {
+      const season = race.season - 2000;
+
+      if (!map.get(`${race.race.distance} ${race.race.name}`)) {
+        const seasons = [];
+        for (let index = 0; index < new Date().getFullYear() - 2000; index++) {
+          seasons.push(-1);
+        }
+        seasons[season] = race.time;
+        map.set(`${race.race.distance} ${race.race.name}`, seasons);
+      } else if (
+        map.get(`${race.race.distance} ${race.race.name}`)[season] === -1 ||
+        race.time < map.get(`${race.race.distance} ${race.race.name}`)[season]
+      ) {
+        const seasons = map.get(`${race.race.distance} ${race.race.name}`);
+        seasons[season] = race.time;
+        map.set(`${race.race.distance} ${race.race.name}`, seasons);
+        // console.log(user.firstName, user.lastName, map);
+      }
+    });
+
+    req.params.id = user._id;
+    req.body = { records: map };
+
+    await factory.updateOne(Users, req, next);
+
+    // console.log(
+    //   user.firstName,
+    //   user.lastName,
+    //   ': ',
+    //   map,
+    //   '\n ---------------------- \n'
+    // );
+  }
 };
 
 exports.importData = catchAsync(async (req, res, next) => {
@@ -135,9 +202,13 @@ exports.importData = catchAsync(async (req, res, next) => {
       setTimeout(async () => {
         try {
           await Users.create(users, { validateBeforeSave: false });
+          // console.log(users);
+          await addRecord(req, res, next);
           console.log('Data succesfuly loaded!');
         } catch (err) {
           if (err.code === 11000) {
+            // console.log(users);
+            await addRecord(req, res, next);
             console.log('Data succesfuly updated!');
           } else {
             console.log(err);
@@ -176,7 +247,11 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
 
-  //2) Update user doc
+  if (req.body.teacher === '-1') {
+    // next(new AppError('Vous devez renseigner un professeur', 400));
+    req.body.teacher = null;
+  }
+
   const filteredBody = filterObj(
     req.body,
     'firstName',
@@ -185,16 +260,14 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     'teacher',
     'email'
   );
-  if (req.body.teacher === '-1') {
-    next(new AppError('Vous devez renseigner un professeur', 400));
-  }
 
   // 3) Update user document
+  console.log(req.body);
   const updatedUser = await Users.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true
   });
-
+  console.log(2);
   res.status(200).json({
     status: 'success',
     data: { user: updatedUser }

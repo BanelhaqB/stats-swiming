@@ -1,9 +1,13 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable prefer-destructuring */
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const APIFeatures = require('./../utils/apiFeatures');
+const csvParser = require('csv-parser');
+const User = require('../models/userModel');
+
+const ObjectId = mongoose.Types.ObjectId;
 
 exports.deleteOne = async (Model, req, next) => {
   const doc = await Model.findByIdAndDelete(req.params.id);
@@ -16,6 +20,11 @@ exports.deleteOne = async (Model, req, next) => {
 };
 
 exports.updateOne = async (Model, req, next) => {
+  if (req.body.teacher === '-1') {
+    // next(new AppError('Vous devez renseigner un professeur', 400));
+    req.body.teacher = null;
+  }
+
   const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
@@ -61,17 +70,28 @@ exports.getOne = async (Model, req, next, popOptions) => {
   return { doc };
 };
 
-exports.getAll = async (Model, req) => {
+exports.getAll = async (Model, req, options) => {
   let filter = {};
-  if (req.params.teacherId) filter = { teacher: req.params.teacherId };
+  if (req.params.teacherId)
+    filter = { teacher: new ObjectId(req.params.teacherId) };
 
+  console.log(filter, req.query);
   //EXECUTE THE QUERY
-  const features = new APIFeatures(Model.find(filter), req.query)
-    .filter()
-    .search()
-    .sort()
-    .limitFields()
-    .paginate();
+  let features;
+  if (options === '++') {
+    features = new APIFeatures(Model.find(filter), req.query)
+      .filter()
+      .search(filter.teacher)
+      .sort()
+      .limitFields();
+  } else {
+    features = new APIFeatures(Model.find(filter), req.query)
+      .filter()
+      .search(filter.teacher)
+      .sort()
+      .limitFields()
+      .paginate();
+  }
 
   const doc = await features.query;
 
@@ -169,6 +189,21 @@ exports.races = async (Model, req, next, action, filter) => {
   }
 
   return { results: races.length, page, races };
+};
+
+exports.records = async (req, res, next) => {
+  let user = req.user;
+  if (req.params.studentId) {
+    const student = await User.findById(req.params.studentId);
+    if (!student.teacher || !student.teacher === req.user.id) {
+      next(new AppError('This is not your student', 403));
+    }
+    user = student;
+  }
+
+  const records = user.records;
+
+  return records;
 };
 
 // ---------------------------------------------------------------
@@ -445,6 +480,51 @@ exports.stats = async (Model, req, next) => {
     }
   ]);
 
+  //Progress
+
+  // const race = `${race.distance} ${race.name}`;
+
+  // const recordsTmp = req.user.records.get(race);
+  const recordsAllRaces = await User.findById(req.user._id, 'records');
+  const recordsTmp = recordsAllRaces.records.get(
+    `${race.distance} ${race.name}`
+  );
+  console.log(recordsTmp);
+
+  const records = [];
+  const progress = [];
+
+  if (!recordsTmp) {
+    next(new AppError(`Pas de course au ${race}`, 404));
+  }
+
+  for (let k = 0; k < recordsTmp.length; k++) {
+    if (recordsTmp[k] !== -1)
+      records.push({ season: k + 2000, time: recordsTmp[k] });
+  }
+
+  console.log(records.length < 2);
+
+  if (records.length < 2) {
+    next(new AppError(`Pas assez de course au ${race}`, 404));
+  }
+
+  for (let k = 0; k < records.length - 1; k++) {
+    const prog = {
+      season: records[k + 1].season,
+      time:
+        Math.round(
+          ((records[k].time - records[k + 1].time) / records[k].time) *
+            100 *
+            100
+        ) / 100
+    };
+
+    progress.push(prog);
+  }
+
+  console.log(race, records, progress);
+
   //   console.log(statsPerso);
   const data = {
     compareBy: groupBy._id.substring(1),
@@ -455,7 +535,9 @@ exports.stats = async (Model, req, next) => {
     racesPersoByDate,
     reslutsCompare: statsByComapareByDates.length,
     statsPersoByComapareByDates,
-    statsByComapareByDates
+    statsByComapareByDates,
+    records,
+    progress
   };
   return data;
   // res.status(200).json({
@@ -617,4 +699,47 @@ exports.getGroupRaces = async (Model, req, next, group, season, teacherId) => {
 
   // console.log(max.group);
   return racesByDate;
+};
+
+exports.progress = async (req, res, next) => {
+  const race = req.params.race;
+
+  // const recordsTmp = req.user.records.get(race);
+  const recordsAllRaces = await User.findById(req.user._id, 'records');
+  const recordsTmp = recordsAllRaces.records.get(race);
+  console.log(recordsTmp);
+
+  const records = [];
+  const progress = [];
+
+  if (!recordsTmp) {
+    next(new AppError(`Pas de course au ${race}`, 404));
+  }
+
+  for (let k = 0; k < recordsTmp.length; k++) {
+    if (recordsTmp[k] !== -1)
+      records.push({ season: k + 2000, time: recordsTmp[k] });
+  }
+
+  console.log(records.length < 2);
+
+  if (records.length < 2) {
+    next(new AppError(`Pas assez de course au ${race}`, 404));
+  }
+
+  for (let k = 0; k < records.length - 1; k++) {
+    const prog = {
+      season: records[k + 1].season,
+      time:
+        Math.round(
+          ((records[k].time - records[k + 1].time) / records[k].time) *
+            100 *
+            100
+        ) / 100
+    };
+
+    progress.push(prog);
+  }
+
+  console.log(race, records, progress);
 };

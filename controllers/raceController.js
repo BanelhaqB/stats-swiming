@@ -11,13 +11,26 @@ const factory = require('./handlerFactory');
 
 exports.getAllRaces = catchAsync(async (req, res, next) => {
   const data = await factory.races(Users, req, next, 'getAll', {});
+  const records = await factory.records(req, res, next);
+
+  console.log(records);
 
   res.status(200).json({
     status: 'success',
     results: data.results,
-    races: data.races
+    races: data.races,
+    records
   });
 });
+
+// exports.getRecords = catchAsync(async (req, res, next) => {
+
+//   console.log(records);
+//   res.status(200).json({
+//     status: 'success',
+
+//   });
+// });
 
 // exports.createRace = factory.races(Users, 'create');
 // exports.deleteRace = factory.races(Users, 'delete');
@@ -89,5 +102,13 @@ exports.cardStats = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data
+  });
+});
+
+exports.progress = catchAsync(async (req, res, next) => {
+  await factory.progress(req, res, next);
+
+  res.status(200).json({
+    status: 'success'
   });
 });

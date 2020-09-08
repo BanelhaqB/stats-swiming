@@ -20,6 +20,7 @@ const updateGroupForm = document.querySelectorAll('.updateGroup');
 const getPersonalStatsBtn = document.querySelector('#getPersonalStats');
 const getCompareStatsBtn = document.querySelector('#getCompareStatsBtn');
 const studentsFilterForm = document.querySelector('#studentsFilterForm');
+const searchBar = document.querySelector('#search_name');
 
 function updateQueryStringParameter(uri, key, value) {
   var re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i');
@@ -45,14 +46,16 @@ if (logOutBtn) logOutBtn.addEventListener('click', logout);
 if (userDataForm)
   userDataForm.addEventListener('submit', e => {
     e.preventDefault();
-
+    console.log('user-page');
     const form = {
       firstName: document.getElementById('firstname').value,
       lastName: document.getElementById('lastname').value,
       birthYear: document.getElementById('birthYear').value,
       teacher: document.getElementById('teacher').value,
       email: document.getElementById('email').value,
-      role: document.getElementById('role').value
+      role: document.getElementById('role')
+        ? document.getElementById('role').value
+        : 'not-admin'
     };
 
     updateSettings(form, 'data');
@@ -164,7 +167,13 @@ if (racesFilterForm) {
         size: document.getElementById('size').value,
         season: document.getElementById('season').value
       };
-      console.log(filter);
+
+      const search = searchBar.value;
+
+      if (search) {
+        filter.name = search;
+      }
+
       await getRaces(filter);
     });
   });

@@ -11,6 +11,8 @@ block content
     main.main
         .user-view
             nav.user-view__menu
+                a.laptop__back(href='/')
+                    span.emoji-left &#x1F448; Retour
                 ul.side-nav
                     +navItem('/me','Profil','users')
                     +navItem('/historical','Historique','note-list')
@@ -83,7 +85,13 @@ block content
                                     li#min Minimum:  --
                     .stats
                         .stats__graph
+                            canvas#myChart3
+                    
+                    .stats
+                        .stats__graph
                             canvas#myChart2 
+
+                    
                             //- script const ctx = document.getElementById('myChart').getContext('2d');const chart = () => new Chart(ctx, { type: 'line',data: {labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],datasets: [{label: `${stats.race.name}`,borderColor: '#81ecec',data: [0, 10, 5, 2, 20, 30, 45]}]}}); window.onload = chart;
 
                     //-     .stats__card

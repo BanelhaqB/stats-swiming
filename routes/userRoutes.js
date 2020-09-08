@@ -8,9 +8,9 @@ const router = express.Router();
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
-
+router.post('/upload-csv', userController.uploadCSV, userController.importData);
 //Protect all routes below
-router.use(authController.protect);
+// router.use(authController.protect);
 
 // router.get('/me', userController.getMe, userController.getUser);
 router.patch('/updateMe', userController.updateMe);
@@ -26,8 +26,6 @@ router.get('/getGroups', userController.getGroups);
 router.get('/getGroupRaces', userController.getGroupRaces);
 
 // router.use(authController.restrictTo('admin', 'teacher-admin'));
-
-router.post('/upload-csv', userController.uploadCSV, userController.importData);
 
 router
   .route('/')

@@ -4,13 +4,15 @@ mixin navItem(link,text,icon,active)
     li(class=`${active ? 'side-nav--active':''}`)
         a(href=`${link}`)
             svg
-                use(xlink:href=`img/sprite.svg#icon-${icon}`)
+                use(xlink:href=`/img/sprite.svg#icon-${icon}`)
             | #{text}
 
 block content
     main.main
         .user-view
             nav.user-view__menu
+                a.laptop__back(href='/')
+                    span.emoji-left &#x1F448; Retour
                 ul.side-nav
                     +navItem('/me','Profil','users')
                     +navItem('/historical','Historique','note-list')
@@ -48,9 +50,8 @@ block content
                     .search
                         input#search_name.search__input(type='text', placeholder='Rechercher un élève')
                         button.search__button
-                            svg.search__icon
-                                use(xlink:href='img/sprite.svg#icon-magnifying-glass')
-                        a.submitForm.btn-me-secondary-me.u-margin-left-medium.submitFilters Tout afficher &rarr;
+                            svg.search__icon.submitFilters
+                                use(xlink:href='/img/sprite.svg#icon-magnifying-glass')
                     table.list.u-margin-top-medium
                         thead.list__head
                             tr
@@ -73,9 +74,9 @@ block content
                                             input.input__group(type="number", value=`${user.group ? user.group : 0}`,style='border: none;outline: none;',data-id=`${user._id}`)
 
                                     td      
-                                        a(href=`statistics?${user._id}`)
+                                        a(href=`/statistics?${user._id}`)
                                             svg.search__icon
-                                                use(xlink:href='img/sprite.svg#icon-adjustments')
+                                                use(xlink:href='/img/sprite.svg#icon-adjustments')
                     .pagination              
                         if page !== 1
                             a#prevPage.btn-me-secondary-me.pagination__btn= `← Page ${page - 1}`

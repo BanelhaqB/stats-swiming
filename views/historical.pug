@@ -11,6 +11,8 @@ block content
     main.main
         .user-view
             nav.user-view__menu
+                a.laptop__back(href='/')
+                    span.emoji-left &#x1F448; Retour
                 ul.side-nav
                     +navItem('/me','Profil','users')
                     +navItem('/historical','Historique','note-list', true)
@@ -33,6 +35,7 @@ block content
                         h5.admin-nav__heading Filtres
                         form.form__filter-races
                             select#distance.form__input.filter__item(name="distance")
+                                option(value='1') Toute Distance
                                 option(value='50') 50m
                                 option(value='100') 100m
                                 option(value='200') 200m
@@ -42,6 +45,7 @@ block content
                                 option(value='4100') 4x100m
                                 option(value='4200') 4x200m
                             select#name.form__input.filter__item(name="name")
+                                option(value='1') Toute Nage
                                 option(value='nage libre') nage libre
                                 option(value='dos') dos
                                 option(value='brasse') brasse
@@ -64,7 +68,7 @@ block content
                     .search
                         input#search_name.search__input(type='text', placeholder='Rechercher une course')
                         button.search__button
-                            svg.search__icon
+                            svg.search__icon.racesFilterBtn
                                 use(xlink:href='img/sprite.svg#icon-magnifying-glass')
                         a.btn-me-secondary-me.u-margin-left-medium.racesFilterBtn Tout afficher &rarr;
                     table.list.u-margin-top-medium

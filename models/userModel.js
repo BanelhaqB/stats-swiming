@@ -82,6 +82,16 @@ const userSchema = new mongoose.Schema(
       default: true,
       select: false
     },
+    records: {
+      // season: {
+      //   type: Number,
+      //   minimum: 1940,
+      //   maximum: new Date().getFullYear()
+      // },
+
+      type: Map,
+      of: [Number]
+    },
     races: [
       {
         race: {
@@ -101,6 +111,11 @@ const userSchema = new mongoose.Schema(
           }
         },
         date: Date,
+        age: Number,
+        category: {
+          type: String,
+          enum: ['avenir', 'jeune', 'junior', 'senior']
+        },
         season: {
           type: Number,
           minimum: 1940,

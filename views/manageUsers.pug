@@ -11,6 +11,8 @@ block content
     main.main
         .user-view
             nav.user-view__menu
+                a.laptop__back(href='/')
+                    span.emoji-left &#x1F448; Retour
                 ul.side-nav
                     +navItem('/me','Profil','users')
                     +navItem('/historical','Historique','note-list')
@@ -20,7 +22,7 @@ block content
                     .admin-nav
                         h5.admin-nav__heading Professeur
                         ul.side-nav
-                            +navItem('/students','Liste élèves','folder-information')
+                            +navItem(`/students/${user.id}`,'Liste élèves','folder-information')
                             +navItem('#','Groupes','users')
 
                 - if(user.role === 'admin' || user.role === 'teacher-admin')
@@ -57,7 +59,7 @@ block content
                     .search
                         input#search_name.search__input(type='text', placeholder='Rechercher utilisateurs')
                         button.search__button
-                            svg.search__icon
+                            svg.search__icon.submitFilters
                                 use(xlink:href='img/sprite.svg#icon-magnifying-glass')
                         a.btn-me-secondary-me.u-margin-left-medium.submitFilters Tout afficher &rarr;
                     table.list.u-margin-top-medium

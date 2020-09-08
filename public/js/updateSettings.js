@@ -15,10 +15,10 @@ export const updateSettings = async (data, type) => {
     if (!id) {
       url =
         type === 'password'
-          ? `http://127.0.0.1:8080/api/v1/users/updateMyPW`
-          : `http://127.0.0.1:8080/api/v1/users/updateMe`;
+          ? `http://localhost:8080/api/v1/users/updateMyPW`
+          : `http://localhost:8080/api/v1/users/updateMe`;
     } else {
-      url = `http://127.0.0.1:8080/api/v1/users/${id}`;
+      url = `http://localhost:8080/api/v1/users/${id}`;
     }
     console.log(1, url);
 
@@ -46,7 +46,7 @@ export const deleteUser = async () => {
     if (!id) {
       showAlert('error', "Vous n'êtes pas autorisé à supprimer un utilisateur");
     } else {
-      url = `http://127.0.0.1:8080/api/v1/users/${id}`;
+      url = `http://localhost:8080/api/v1/users/${id}`;
     }
     console.log(1, url);
 
@@ -70,7 +70,7 @@ export const deleteUser = async () => {
 export const update_group = async (group, id) => {
   try {
     // console.log(data, type);
-    const url = `http://127.0.0.1:8080/api/v1/users/${id}`;
+    const url = `http://localhost:8080/api/v1/users/${id}`;
 
     const data = { group: group };
 

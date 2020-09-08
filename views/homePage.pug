@@ -1,71 +1,208 @@
 extends base
 
 block content
-    main
-        section.home
-            img(src="/img/home/bg.jpg", alt="swimmingpool").home__img
-            .home__card
-                h1.u-center-text.home__card--title Cergy Pontoise Natation
-                p.u-center-text.home__card--description Site Officiel intégrant les statistiques de chaque nageur
-                a(href="statistics").btn-me.btn-me--blue.btn-me--blue-small Statistiques
- 
-        section#offer.offer
-            .container
+    .navigation
+        input#navi-toggle.navigation__checkbox(type='checkbox')
+        label.navigation__button(for='navi-toggle')
+            span.navigation__icon &nbsp;
+        .navigation__bg &nbsp;
+        nav.navigation__nav
+            ul.navigation__list
+                if locals.user
+                    li.navigation__item
+                        a.navigation__link(href='/me') Profil - #{locals.user.firstName}
+                    li.navigation__item
+                        a.navigation__link(href='/historical') Historique
+                    li.navigation__item
+                        a.navigation__link(href='/statistics') Statistiques
+                    - if(user.role === 'teacher' || user.role === 'teacher-admin')
+                        li.navigation__item
+                            a.navigation__link(href='#') Liste élèves
+                        li.navigation__item
+                            a.navigation__link(href='#') Groupes
+                    - if(user.role === 'admin' || user.role === 'teacher-admin')
+                        li.navigation__item 
+                            a.navigation__link(href='/manageUsers') Gestion utilisateurs
+                    li.navigation__item 
+                            a.navigation__link.nav__el--logout(href='/') Déconnexion
+                else
+                    li.navigation__item
+                        a.navigation__link(href='/login') Connexion
+                    li.navigation__item
+                        a.navigation__link(href='/signup') Inscription
+                    li.navigation__item
+                        a.navigation__link(href='#section-tours') Nous rejoindre
+                    li.navigation__item
+                        a.navigation__link(href='#section-tours') Nos formules
+        header.header-nat
+            .header-nat__logo-box
+                img.header-nat__logo(src='img/home/logo-white.png' alt='Logo')
+            .header-nat__text-box
+                h1.heading-primary-nat
+                    span.heading-primary--main Statistiques
+                    span.heading-primary--sub l&apos;excellence &agrave; port&eacute; de main
+                a.btn.btn--white.btn--animated-nat(href='#section-tours') Nous rejoindre
+        main.nat
+            section.section-about
+                .u-center-text.u-margin-bottom-big
+                    h2.heading-secondary-nat
+                        | Exciting tours for adventurous people
                 .row
-                    .col-md-12
-                        .main_offer_area
-                            .head_title.center.m-y-3.wow.fadeInUp
-                                h2 Ce que nous offrons
-                            .main_offer_content.m-b-3.wow.fadeInUp
-                                .row
-                                    .col-md-6
-                                        .single_offer.m-t-3
-                                            .row
-                                                .col-sm-3
-                                                    .single_offer_icon
-                                                        i.fa.fa-cloud
-                                                .col-sm-9
-                                                    .single_offer_text
-                                                        h3  Une base de donn&eacute;es compl&egrave;te
-                                                        p
-                                                            | Chaque course de chaque joueur, vous pouvez vous inscrire et importer vos propres donn&eacute;es &eacute;galement.
-                                    .col-md-6
-                                        .single_offer.m-t-3
-                                            .row
-                                                .col-sm-3
-                                                    .single_offer_icon
-                                                        i.fa.fa-line-chart
-                                                .col-sm-9
-                                                    .single_offer_text
-                                                        h3  Analyses et Conseils
-                                                        p
-                                                            | Une analyse personnelle et des conseils afin que chaque joueur puissent savoir comment am&eacute;liorer ses performances
-    //-     hr
-    //- // End of Offer Section
-    //- // /Start your project here
-    //- // SCRIPTS
-    //- // JQuery
-    //- script(type='text/javascript', src='/accueil/js/jquery-2.2.3.min.js')
-    //- // Bootstrap tooltips
-    //- script(type='text/javascript', src='/accueil/js/tether.min.js')
-    //- // Bootstrap core JavaScript
-    //- script(type='text/javascript', src='/accueil/js/bootstrap.min.js')
-    //- // MDB core JavaScript
-    //- script(type='text/javascript', src='/accueil/js/mdb.min.js')
-    //- // Wow js
-    //- script(type='text/javascript', src='/accueil/js/wow.min.js')
-    //- // Mixitup js
-    //- script(type='text/javascript', src='/accueil/js/jquery.mixitup.min.js')
-    //- // Magnific-popup js
-    //- script(type='text/javascript', src='/accueil/js/jquery.magnific-popup.js')
-    //- // accordion js
-    //- script(type='text/javascript', src='/accueil/js/accordion.js')
-    //- // MDB core JavaScript
-    //- script(type='text/javascript', src='/accueil/js/materialize.js')
-    //- script.
-    //-     $(".button-collapse").sideNav();
-    //- // wow js active
-    //- script(type='text/javascript').
-    //-     new WOW().init();
-    //- script(type='text/javascript', src='/accueil/js/plugins.js')
-    //- script(type='text/javascript', src='/accueil/js/main.js')
+                    .col-1-of-2
+                        h3.heading-tertiary.u-margin-bottom-small
+                            | you&apos;re going to fall in love with nature
+                        p.paragraph
+                            | Lorem ipsum dolor sit amet consectetu spernatur libero repellat
+                            | quis consequatur ducimus quam nisi exercitationem omnis earum qui.
+                        h3.heading-tertiary.u-margin-bottom-small
+                            | Live adventures like you never have before
+                        p.paragraph
+                            | Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            | Asperiores nulla deserunt voluptatum nam.
+                        a.btn-secondary(href='#') Learn more &rarr;
+                    .col-1-of-2
+                        .composition
+                            img.composition__photo.composition__photo--p1(src='img/home/nat-1-large.jpg' alt='Photo 1')
+                            img.composition__photo.composition__photo--p2(src='img/home/nat-2-large.jpg' alt='Photo 2')
+                            img.composition__photo.composition__photo--p3(src='img/home/nat-3-large.jpg' alt='Photo 3')
+            section.section-features
+                .row
+                    .col-1-of-3
+                        .feature-box
+                            i.feature-box__icon.icon-basic-world
+                            h3.heading-tertiary.u-margin-bottom-small
+                                | Suivie des performances
+                            p.feature-box__text
+                                | Toute vos performances sont automatiquement import&eacute; et
+                                | accessible sur la plateforme
+                    .col-1-of-3
+                        .feature-box
+                            i.feature-box__icon.icon-basic-compass
+                            h3.heading-tertiary.u-margin-bottom-small
+                                | Statistiques
+                            p.feature-box__text
+                                | Visualiser votre proucentage de progression et comparer le aux
+                                | pourcentages moyen fran&ccedil;ais
+                    .col-1-of-3
+                        .feature-box
+                            i.feature-box__icon.icon-basic-map
+                            h3.heading-tertiary.u-margin-bottom-small
+                                | Gestion des entrainments
+                            p.feature-box__text
+                                | Cr&eacute;ez facilement vos entrainements et partager le &agrave; vos &eacute;l&egrave;ves
+            section#section-tours.section-tours
+                .u-center-text.u-margin-bottom-big
+                    h2.heading-secondary-nat Nos formules
+                .row
+                    .col-1-of-3
+                        .card-nat
+                            .card-nat__side.card-nat__side--front.card-nat__side--front-1
+                                .card-nat__picture.card-nat__picture--1 &nbsp;
+                                h4.card-nat__heading
+                                    span.card-nat__heading-span.card-nat__heading-span--1 Suivie personnel
+                                .card-nat__details
+                                    ul
+                                        li Gaphiques d&apos;&eacute;volution
+                                        li Comparaison au sein du club
+                                        li Centraliser toute vos performances
+                                        li Importation des performances automatique
+                            .card-nat__side.card-nat__side--back.card-nat__side--back-1
+                                .card-nat__cta
+                                    .card-nat__price-box
+                                        p.card-nat__price-only Pour
+                                        p.card-nat__price-value 2&euro;*
+                                    a.btn.btn--white(href='#popup') Choisir !
+                                p.card-nat__price-label * Prix par licenci&eacute; par an
+                    .col-1-of-3
+                        .card-nat
+                            .card-nat__side.card-nat__side--front.card-nat__side--front-2
+                                .card-nat__picture.card-nat__picture--2 &nbsp;
+                                h4.card-nat__heading
+                                    span.card-nat__heading-span.card-nat__heading-span--2 Statistiques globale
+                                .card-nat__details
+                                    ul
+                                        li Comparaison &agrave; l&apos;&eacute;chelle nationale
+                                        li Calcul des marges d&apos;am&eacute;lioation
+                                        li Note les nageurs
+                                        li Note les coachs
+                                        li Note le club
+                            .card-nat__side.card-nat__side--back.card-nat__side--back-2
+                                .card-nat__cta
+                                    .card-nat__price-box
+                                        p.card-nat__price-only Pour
+                                        p.card-nat__price-value 2&euro;*
+                                    a.btn.btn--white(href='#popup') Choisir !
+                                p.card-nat__price-label * Prix par licenci&eacute; par an
+                    .col-1-of-3
+                        .card-nat
+                            .card-nat__side.card-nat__side--front.card-nat__side--front-3
+                                .card-nat__picture.card-nat__picture--3 &nbsp;
+                                h4.card-nat__heading
+                                    span.card-nat__heading-span.card-nat__heading-span--3 Pack suivie + Statistiques
+                                .card-nat__details
+                                    ul
+                                        li Fonctionalit&eacute;s plan suivie
+                                        li Fonctionalit&eacute;s plan statistiques
+                            .card-nat__side.card-nat__side--back.card-nat__side--back-3
+                                .card-nat__cta
+                                    .card-nat__price-box
+                                        p.card-nat__price-only Pour
+                                        p.card-nat__price-value 3&euro;*
+                                    a.btn.btn--white(href='#popup') Choisir !
+                                p.card-nat__price-label * Prix par licenci&eacute; par an
+            section.section-stories
+                .bg-video
+                    video.bg-video__content(autoplay='' muted='' loop='')
+                        source(src='img/home/video.mp4' type='video/mp4')
+                        source(src='img/home/video.webm' type='video/webm')
+                        | Your browser is not supported!
+                .u-center-text.u-margin-bottom-big
+                    h2.heading-secondary-nat Ce que les clubs pensent de nous
+                .row
+                    .story
+                        figure.story__shape
+                            img.story__img(src='img/home/nat-8.jpg' alt='Person on a tour')
+                            figcaption.story__caption Cergy Pontoise
+                        .story__text
+                            h3.heading-tertiary.u-margin-bottom-small
+                                | Cergy-Pontoise Natation
+                            p
+                                | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                | Tempore cupiditate veniam cumque, explicabo reiciendis aut,
+                                | repellat accusamus possimus tempora quos sed adipisci fuga nam
+                                | facilis, aliquam ipsa alias, adipisicing elit. Tempore
+                                | cupiditate veniam cumque, explicabo reiciendis aut, rep
+                                | possiadipisci am.
+                .row
+                    .story
+                        figure.story__shape
+                            img.story__img(src='img/home/nat-9.jpg' alt='Person on a tour')
+                            figcaption.story__caption Argenteuil
+                        .story__text
+                            h3.heading-tertiary.u-margin-bottom-small
+                                | Argenteuil natation
+                            p
+                                | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                | Tempore cupiditate veniam cumque, explicabo reiciendis aut,
+                                | repellat accusamus possimus tempora quos sed adipisci fuga nam
+                                | facilis, aliquam ipsa alias, adipisicing elit. Tempore
+                                | cupiditate veniam cumque, explicabo reiciendis aut, rep
+                                | possiadipisci am.
+            section.section-book
+                .row
+                    .book
+                        .book__form
+                            form.form(action='#')
+                                .u-margin-bottom-medium
+                                    h2.heading-secondary-nat Nous contacter
+                                .form__group
+                                    input#name.form__input(type='text' placeholder='Nom du club' required='')
+                                    label.form__label(for='name') Nom du club
+                                .form__group
+                                    input#email.form__input(type='email' placeholder='Adresse email' required='')
+                                    label.form__label(for='email') Adresse email
+                                .form__group
+                                    input#text.form__input(type='textarea' placeholder='Votre message' required='')
+                                    label.form__label(for='email') Votre message
+                                .form__group
+                                    button.btn.btn--green Envoyer &rarr;

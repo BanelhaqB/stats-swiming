@@ -6,9 +6,9 @@ export const getUsers = async filter => {
   try {
     const url = `manageUsers?${
       !filter.page || filter.page == '1' ? '' : `&page=${filter.page}`
-    }${!filter.sex || filter.sex == '1' ? '' : `&sex=${filter.sex}`}${
-      filter.role ? '' : `&role=${filter.role}`
-    }${
+    }${!filter.role || filter.role == '1' ? '' : `&role=${filter.role}`}${
+      !filter.sex || filter.sex == '1' ? '' : `&sex=${filter.sex}`
+    }${filter.role ? '' : `&role=${filter.role}`}${
       !filter.teacher || filter.teacher == '1'
         ? ''
         : `&teacher=${filter.teacher}`
@@ -26,7 +26,7 @@ export const getUsers = async filter => {
 
 export const getStudents = async filter => {
   try {
-    const url = `students${
+    const url = `/students${
       !filter.teacher || filter.teacher == '1' ? '' : `/${filter.teacher}`
     }?${!filter.page || filter.page == '1' ? '' : `&page=${filter.page}`}${
       !filter.sex || filter.sex == '1' ? '' : `&sex=${filter.sex}`

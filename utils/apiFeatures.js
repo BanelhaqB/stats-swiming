@@ -31,17 +31,29 @@ class APIFeatures {
     return this;
   }
 
-  search() {
+  search(teacherID) {
     if (this.queryString.search) {
       let searchBy = this.queryString.search;
       searchBy = searchBy.toLowerCase();
-      this.query = this.query.model.find({
-        $or: [
-          { firstName: `${searchBy}` },
-          { lastName: `${searchBy}` },
-          { name: `${searchBy}` }
-        ]
-      });
+
+      const filter = teacherID
+        ? {
+            $or: [
+              { firstName: `${searchBy}` },
+              { lastName: `${searchBy}` },
+              { name: `${searchBy}` }
+            ],
+            teacher: teacherID
+          }
+        : {
+            $or: [
+              { firstName: `${searchBy}` },
+              { lastName: `${searchBy}` },
+              { name: `${searchBy}` }
+            ]
+          };
+
+      this.query = this.query.model.find(filter);
     } else {
       // DEFAULT SORT
       this.query = this.query.find();

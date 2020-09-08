@@ -7,7 +7,8 @@ const factory = require('./handlerFactory');
 
 exports.homePage = catchAsync(async (req, res, next) => {
   res.status(200).render('homePage', {
-    title: 'Acceuil'
+    title: 'Acceuil',
+    noHeader: true
   });
 });
 
@@ -54,7 +55,7 @@ exports.manageUsers = catchAsync(async (req, res, next) => {
 
 exports.getAllstudents = catchAsync(async (req, res, next) => {
   const users = await factory.getAll(User, req);
-
+  console.log(users);
   res.status(200).render('students', {
     title: "Liste d'Élèves",
     results: users.length,
@@ -64,8 +65,22 @@ exports.getAllstudents = catchAsync(async (req, res, next) => {
 });
 
 exports.getHistorical = catchAsync(async (req, res, next) => {
+  // console.log(req.query);
+
+  // if (req.query['races.size']) {
+  //   req.query['races.size'] *= 1;
+  // }
+
+  if (req.query['races.race.distance']) {
+    req.query['races.race.distance'] *= 1;
+  }
+
+  if (req.query.season) {
+    req.query.season *= 1;
+  }
+
   const data = await factory.races(User, req, next, 'getAll', req.query);
-  // console.log(data.races.races);
+  console.log(data.races[0].races, data.races[1].races);
   res.status(200).render('historical', {
     title: "Liste d'Élèves",
     results: data.results,
