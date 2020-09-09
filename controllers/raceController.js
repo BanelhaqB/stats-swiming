@@ -112,3 +112,13 @@ exports.progress = catchAsync(async (req, res, next) => {
     status: 'success'
   });
 });
+
+exports.updateProgress = catchAsync(async (req, res, next) => {
+  const users = await factory.updateProgress(req, res, next);
+  console.log(users);
+
+  res.status(200).json({
+    status: 'success',
+    users
+  });
+});

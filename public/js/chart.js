@@ -16,6 +16,22 @@ function sectomin2(time) {
   return min.concat("'", sec).concat("''", '');
 }
 
+function removeData(chart) {
+  chart.data.labels.pop();
+  chart.data.datasets.forEach(dataset => {
+    dataset.data.pop();
+  });
+  chart.update();
+}
+
+function addData(chart, label, data) {
+  chart.data.labels.push(label);
+  chart.data.datasets.forEach(dataset => {
+    dataset.data.push(data);
+  });
+  chart.update();
+}
+
 export const getPersonalStats = async (distance, name, compareBy, student) => {
   // -- API Request --
   console.log(student ? 1 : 2);
@@ -23,12 +39,12 @@ export const getPersonalStats = async (distance, name, compareBy, student) => {
   if (student) {
     res = await axios({
       method: 'GET',
-      url: `http://localhost:8080/api/v1/races/stats/${distance}/${name}/${compareBy}/${student}`
+      url: `/api/v1/races/stats/${distance}/${name}/${compareBy}/${student}`
     });
   } else {
     res = await axios({
       method: 'GET',
-      url: `http://localhost:8080/api/v1/races/stats/${distance}/${name}/${compareBy}`
+      url: `/api/v1/races/stats/${distance}/${name}/${compareBy}`
     });
   }
   console.log(res);
@@ -47,9 +63,14 @@ export const getPersonalStats = async (distance, name, compareBy, student) => {
 
   // -- Data --
   const data = res.data.data.racesPersoByDate.map(el => -el.races.time);
-
+  const dataAvg = res.data.data.rankings.map(el => -el.avgRanking);
+  const dataMax = res.data.data.rankings.map(el => -el.minRanking);
+  const dataMin = res.data.data.rankings.map(el => -el.maxRanking);
+  console.log(data, dataAvg, dataMax, dataMin);
   // -- Chart --
   var ctx = document.getElementById('myChart').getContext('2d');
+  // removeData(ctx);
+  // addData(ctx, labels, [data, dataAvg, dataMax, dataMin]);
   var chart = new Chart(ctx, {
     // The type of chart we want to create
     type: 'line',
@@ -60,10 +81,34 @@ export const getPersonalStats = async (distance, name, compareBy, student) => {
       datasets: [
         {
           label: `${distance} ${name}`,
-          borderColor: '#81ecec',
+          borderColor: '#74b9ff',
           backgroundColor: ['transparent'],
           borderWidth: 1,
           data
+        },
+        {
+          label: 'Moyenne',
+          borderColor: '#81ecec',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: dataAvg,
+          hidden: true
+        },
+        {
+          label: 'Maximum',
+          borderColor: '#ffeaa7',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: dataMax,
+          hidden: true
+        },
+        {
+          label: 'Minimum',
+          borderColor: '#ff7675',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: dataMin,
+          hidden: true
         }
       ]
     },
@@ -236,93 +281,101 @@ export const getPersonalStats = async (distance, name, compareBy, student) => {
   document.getElementById('min').textContent = `Minimum:  ${min}`;
 
   // -- Label --
-  const labelsCompare = res.data.data.statsByComapareByDates.map(el => el._id);
+  // const labelsCompare = res.data.data.statsByComapareByDates.map(el => el._id);
 
-  // -- Data --
-  const dataCompare = res.data.data.statsByComapareByDates.map(
-    el => -el.avgRaking
-  );
+  // // -- Data --
+  // const dataCompare = res.data.data.statsByComapareByDates.map(
+  //   el => -el.avgRaking
+  // );
 
-  const dataPerso = [];
-  const dataCompareMax = [];
-  const dataCompareMin = [];
+  // const dataPerso = [];
+  // const dataCompareMax = [];
+  // const dataCompareMin = [];
 
-  res.data.data.statsPersoByComapareByDates.forEach(el => {
-    dataPerso.push({ x: el._id, y: -el.avgRaking });
-  });
+  // res.data.data.statsPersoByComapareByDates.forEach(el => {
+  //   dataPerso.push({ x: el._id, y: -el.avgRaking });
+  // });
 
-  res.data.data.statsByComapareByDates.forEach(el => {
-    dataCompareMax.push({ x: el._id, y: -el.maxRaking });
-  });
+  // res.data.data.statsByComapareByDates.forEach(el => {
+  //   dataCompareMax.push({ x: el._id, y: -el.maxRaking });
+  // });
 
-  res.data.data.statsByComapareByDates.forEach(el => {
-    dataCompareMin.push({ x: el._id, y: -el.minRaking });
-  });
+  // res.data.data.statsByComapareByDates.forEach(el => {
+  //   dataCompareMin.push({ x: el._id, y: -el.minRaking });
+  // });
 
-  console.log(labelsCompare, dataPerso, dataCompare);
-  // -- Chart --
-  var ctx2 = document.getElementById('myChart2').getContext('2d');
-  var chart2 = new Chart(ctx2, {
-    // The type of chart we want to create
-    type: 'line',
+  // console.log(labelsCompare, dataPerso, dataCompare);
+  // // -- Chart --
+  // var ctx2 = document.getElementById('myChart2').getContext('2d');
+  // var chart2 = new Chart(ctx2, {
+  //   // The type of chart we want to create
+  //   type: 'line',
 
-    // The data for our dataset
-    data: {
-      labels: labelsCompare,
-      datasets: [
-        {
-          label: `Moyenne`,
-          borderColor: '#81ecec',
-          backgroundColor: ['transparent'],
-          borderWidth: 1,
-          data: dataCompare
-        },
-        {
-          label: `Perso`,
-          borderColor: '#74b9ff',
-          backgroundColor: ['transparent'],
-          borderWidth: 1,
-          data: dataPerso
-        },
-        {
-          label: `Minimum`,
-          borderColor: '#ff7675',
-          backgroundColor: ['transparent'],
-          borderWidth: 1,
-          data: dataCompareMax
-        },
-        {
-          label: `Maximum`,
-          borderColor: '#ffeaa7',
-          backgroundColor: ['transparent'],
-          borderWidth: 1,
-          data: dataCompareMin
-        }
-      ]
-    },
+  //   // The data for our dataset
+  //   data: {
+  //     labels: labelsCompare,
+  //     datasets: [
+  //       {
+  //         label: `Moyenne`,
+  //         borderColor: '#81ecec',
+  //         backgroundColor: ['transparent'],
+  //         borderWidth: 1,
+  //         data: dataCompare
+  //       },
+  //       {
+  //         label: `Perso`,
+  //         borderColor: '#74b9ff',
+  //         backgroundColor: ['transparent'],
+  //         borderWidth: 1,
+  //         data: dataPerso
+  //       },
+  //       {
+  //         label: `Minimum`,
+  //         borderColor: '#ff7675',
+  //         backgroundColor: ['transparent'],
+  //         borderWidth: 1,
+  //         data: dataCompareMax
+  //       },
+  //       {
+  //         label: `Maximum`,
+  //         borderColor: '#ffeaa7',
+  //         backgroundColor: ['transparent'],
+  //         borderWidth: 1,
+  //         data: dataCompareMin
+  //       }
+  //     ]
+  //   },
 
-    // Configuration options go here
-    options: {
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              beginAtZero: false,
-              callback: function(value, index, values) {
-                return sectomin2(value);
-              }
-            }
-          }
-        ]
-      }
-    }
-  });
+  //   // Configuration options go here
+  //   options: {
+  //     scales: {
+  //       yAxes: [
+  //         {
+  //           ticks: {
+  //             beginAtZero: false,
+  //             callback: function(value, index, values) {
+  //               return sectomin2(value);
+  //             }
+  //           }
+  //         }
+  //       ]
+  //     }
+  //   }
+  // });
 
   var ctx3 = document.getElementById('myChart3').getContext('2d');
 
-  const prog = res.data.data.progress.map(el => el.time);
+  // const data = res.data.data.racesPersoByDate.map(el => -el.races.time);
+  // const dataAvg = res.data.data.rankings.map(el => -el.avgRanking);
+  // const dataMax = res.data.data.rankings.map(el => -el.minRanking);
+  // const dataMin = res.data.data.rankings.map(el => -el.maxRanking);
+
+  const prog = res.data.data.marges.map(el => el.pourcentage);
+  const progAvg = res.data.data.marges.map(el => el.avgRanking);
+  const progMax = res.data.data.marges.map(el => el.maxRanking);
+  const progMin = res.data.data.marges.map(el => el.minRanking);
   const seasonProg = res.data.data.progress.map(el => el.season);
-  console.log(prog, seasonProg);
+  console.log(prog, progAvg, progMax, progMin, seasonProg);
   var chart = new Chart(ctx3, {
     // The type of chart we want to create
     type: 'line',
@@ -333,10 +386,34 @@ export const getPersonalStats = async (distance, name, compareBy, student) => {
       datasets: [
         {
           label: `${distance} ${name}`,
-          borderColor: '#81ecec',
+          borderColor: '#74b9ff',
           backgroundColor: ['transparent'],
           borderWidth: 1,
           data: prog
+        },
+        {
+          label: 'Maximum',
+          borderColor: '#ffeaa7',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: progMax,
+          hidden: true
+        },
+        {
+          label: 'Moyenne',
+          borderColor: '#81ecec',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: progAvg,
+          hidden: true
+        },
+        {
+          label: 'Minimum',
+          borderColor: '#ff7675',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: progMin,
+          hidden: true
         }
       ]
     },
@@ -349,7 +426,7 @@ export const getPersonalStats = async (distance, name, compareBy, student) => {
             ticks: {
               beginAtZero: false,
               callback: function(value, index, values) {
-                return sectomin2(value);
+                return `${value > 0 ? '+' : ''}${value}%`;
               }
             }
           }

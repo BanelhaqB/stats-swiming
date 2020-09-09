@@ -92,6 +92,20 @@ const userSchema = new mongoose.Schema(
       type: Map,
       of: [Number]
     },
+    progress: {
+      type: Map,
+      of: [
+        {
+          season: Number,
+          age: Number,
+          category: {
+            type: String,
+            enum: ['avenir', 'jeune', 'junior', 'senior']
+          },
+          poucentage: Number
+        }
+      ]
+    },
     races: [
       {
         race: {

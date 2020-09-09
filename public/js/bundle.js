@@ -8418,7 +8418,7 @@ function () {
             _context.next = 3;
             return (0, _axios.default)({
               method: 'POST',
-              url: 'http://localhost:8080/api/v1/users/login',
+              url: '/api/v1/users/login',
               data: {
                 email: email,
                 password: password
@@ -8475,7 +8475,7 @@ function () {
             _context2.next = 3;
             return (0, _axios.default)({
               method: 'GET',
-              url: 'http://localhost:8080/api/v1/users/logout'
+              url: '/api/v1/users/logout'
             });
 
           case 3:
@@ -8547,9 +8547,9 @@ function () {
             console.log(id);
 
             if (!id) {
-              url = type === 'password' ? "http://localhost:8080/api/v1/users/updateMyPW" : "http://localhost:8080/api/v1/users/updateMe";
+              url = type === 'password' ? "/api/v1/users/updateMyPW" : "/api/v1/users/updateMe";
             } else {
-              url = "http://localhost:8080/api/v1/users/".concat(id);
+              url = "/api/v1/users/".concat(id);
             }
 
             console.log(1, url);
@@ -8610,7 +8610,7 @@ function () {
             if (!id) {
               (0, _alerts.showAlert)('error', "Vous n'êtes pas autorisé à supprimer un utilisateur");
             } else {
-              url = "http://localhost:8080/api/v1/users/".concat(id);
+              url = "/api/v1/users/".concat(id);
             }
 
             console.log(1, url);
@@ -8667,7 +8667,7 @@ function () {
           case 0:
             _context3.prev = 0;
             // console.log(data, type);
-            url = "http://localhost:8080/api/v1/users/".concat(id);
+            url = "/api/v1/users/".concat(id);
             data = {
               group: group
             };
@@ -8815,13 +8815,29 @@ function sectomin2(time) {
   return min.concat("'", sec).concat("''", '');
 }
 
+function removeData(chart) {
+  chart.data.labels.pop();
+  chart.data.datasets.forEach(function (dataset) {
+    dataset.data.pop();
+  });
+  chart.update();
+}
+
+function addData(chart, label, data) {
+  chart.data.labels.push(label);
+  chart.data.datasets.forEach(function (dataset) {
+    dataset.data.push(data);
+  });
+  chart.update();
+}
+
 var getPersonalStats =
 /*#__PURE__*/
 function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(distance, name, compareBy, student) {
-    var res, labels, data, ctx, chart, avg, med, fstQ, trdQ, max, min, labelsCompare, dataCompare, dataPerso, dataCompareMax, dataCompareMin, ctx2, chart2, ctx3, prog, seasonProg;
+    var res, labels, data, dataAvg, dataMax, dataMin, ctx, chart, avg, med, fstQ, trdQ, max, min, ctx3, prog, progAvg, progMax, progMin, seasonProg;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -8837,7 +8853,7 @@ function () {
             _context.next = 4;
             return (0, _axios.default)({
               method: 'GET',
-              url: "http://localhost:8080/api/v1/races/stats/".concat(distance, "/").concat(name, "/").concat(compareBy, "/").concat(student)
+              url: "/api/v1/races/stats/".concat(distance, "/").concat(name, "/").concat(compareBy, "/").concat(student)
             });
 
           case 4:
@@ -8849,7 +8865,7 @@ function () {
             _context.next = 9;
             return (0, _axios.default)({
               method: 'GET',
-              url: "http://localhost:8080/api/v1/races/stats/".concat(distance, "/").concat(name, "/").concat(compareBy)
+              url: "/api/v1/races/stats/".concat(distance, "/").concat(name, "/").concat(compareBy)
             });
 
           case 9:
@@ -8867,9 +8883,21 @@ function () {
 
             data = res.data.data.racesPersoByDate.map(function (el) {
               return -el.races.time;
-            }); // -- Chart --
+            });
+            dataAvg = res.data.data.rankings.map(function (el) {
+              return -el.avgRanking;
+            });
+            dataMax = res.data.data.rankings.map(function (el) {
+              return -el.minRanking;
+            });
+            dataMin = res.data.data.rankings.map(function (el) {
+              return -el.maxRanking;
+            });
+            console.log(data, dataAvg, dataMax, dataMin); // -- Chart --
 
-            ctx = document.getElementById('myChart').getContext('2d');
+            ctx = document.getElementById('myChart').getContext('2d'); // removeData(ctx);
+            // addData(ctx, labels, [data, dataAvg, dataMax, dataMin]);
+
             chart = new Chart(ctx, {
               // The type of chart we want to create
               type: 'line',
@@ -8878,10 +8906,31 @@ function () {
                 labels: labels,
                 datasets: [{
                   label: "".concat(distance, " ").concat(name),
-                  borderColor: '#81ecec',
+                  borderColor: '#74b9ff',
                   backgroundColor: ['transparent'],
                   borderWidth: 1,
                   data: data
+                }, {
+                  label: 'Moyenne',
+                  borderColor: '#81ecec',
+                  backgroundColor: ['transparent'],
+                  borderWidth: 1,
+                  data: dataAvg,
+                  hidden: true
+                }, {
+                  label: 'Maximum',
+                  borderColor: '#ffeaa7',
+                  backgroundColor: ['transparent'],
+                  borderWidth: 1,
+                  data: dataMax,
+                  hidden: true
+                }, {
+                  label: 'Minimum',
+                  borderColor: '#ff7675',
+                  backgroundColor: ['transparent'],
+                  borderWidth: 1,
+                  data: dataMin,
+                  hidden: true
                 }]
               },
               // Configuration options go here
@@ -8918,92 +8967,101 @@ function () {
             document.getElementById('trdQ').textContent = "3\xE8me Quartiles:  ".concat(trdQ);
             document.getElementById('max').textContent = "Reccord:  ".concat(max);
             document.getElementById('min').textContent = "Minimum:  ".concat(min); // -- Label --
+            // const labelsCompare = res.data.data.statsByComapareByDates.map(el => el._id);
+            // // -- Data --
+            // const dataCompare = res.data.data.statsByComapareByDates.map(
+            //   el => -el.avgRaking
+            // );
+            // const dataPerso = [];
+            // const dataCompareMax = [];
+            // const dataCompareMin = [];
+            // res.data.data.statsPersoByComapareByDates.forEach(el => {
+            //   dataPerso.push({ x: el._id, y: -el.avgRaking });
+            // });
+            // res.data.data.statsByComapareByDates.forEach(el => {
+            //   dataCompareMax.push({ x: el._id, y: -el.maxRaking });
+            // });
+            // res.data.data.statsByComapareByDates.forEach(el => {
+            //   dataCompareMin.push({ x: el._id, y: -el.minRaking });
+            // });
+            // console.log(labelsCompare, dataPerso, dataCompare);
+            // // -- Chart --
+            // var ctx2 = document.getElementById('myChart2').getContext('2d');
+            // var chart2 = new Chart(ctx2, {
+            //   // The type of chart we want to create
+            //   type: 'line',
+            //   // The data for our dataset
+            //   data: {
+            //     labels: labelsCompare,
+            //     datasets: [
+            //       {
+            //         label: `Moyenne`,
+            //         borderColor: '#81ecec',
+            //         backgroundColor: ['transparent'],
+            //         borderWidth: 1,
+            //         data: dataCompare
+            //       },
+            //       {
+            //         label: `Perso`,
+            //         borderColor: '#74b9ff',
+            //         backgroundColor: ['transparent'],
+            //         borderWidth: 1,
+            //         data: dataPerso
+            //       },
+            //       {
+            //         label: `Minimum`,
+            //         borderColor: '#ff7675',
+            //         backgroundColor: ['transparent'],
+            //         borderWidth: 1,
+            //         data: dataCompareMax
+            //       },
+            //       {
+            //         label: `Maximum`,
+            //         borderColor: '#ffeaa7',
+            //         backgroundColor: ['transparent'],
+            //         borderWidth: 1,
+            //         data: dataCompareMin
+            //       }
+            //     ]
+            //   },
+            //   // Configuration options go here
+            //   options: {
+            //     scales: {
+            //       yAxes: [
+            //         {
+            //           ticks: {
+            //             beginAtZero: false,
+            //             callback: function(value, index, values) {
+            //               return sectomin2(value);
+            //             }
+            //           }
+            //         }
+            //       ]
+            //     }
+            //   }
+            // });
 
-            labelsCompare = res.data.data.statsByComapareByDates.map(function (el) {
-              return el._id;
-            }); // -- Data --
+            ctx3 = document.getElementById('myChart3').getContext('2d'); // const data = res.data.data.racesPersoByDate.map(el => -el.races.time);
+            // const dataAvg = res.data.data.rankings.map(el => -el.avgRanking);
+            // const dataMax = res.data.data.rankings.map(el => -el.minRanking);
+            // const dataMin = res.data.data.rankings.map(el => -el.maxRanking);
 
-            dataCompare = res.data.data.statsByComapareByDates.map(function (el) {
-              return -el.avgRaking;
+            prog = res.data.data.marges.map(function (el) {
+              return el.pourcentage;
             });
-            dataPerso = [];
-            dataCompareMax = [];
-            dataCompareMin = [];
-            res.data.data.statsPersoByComapareByDates.forEach(function (el) {
-              dataPerso.push({
-                x: el._id,
-                y: -el.avgRaking
-              });
+            progAvg = res.data.data.marges.map(function (el) {
+              return el.avgRanking;
             });
-            res.data.data.statsByComapareByDates.forEach(function (el) {
-              dataCompareMax.push({
-                x: el._id,
-                y: -el.maxRaking
-              });
+            progMax = res.data.data.marges.map(function (el) {
+              return el.maxRanking;
             });
-            res.data.data.statsByComapareByDates.forEach(function (el) {
-              dataCompareMin.push({
-                x: el._id,
-                y: -el.minRaking
-              });
-            });
-            console.log(labelsCompare, dataPerso, dataCompare); // -- Chart --
-
-            ctx2 = document.getElementById('myChart2').getContext('2d');
-            chart2 = new Chart(ctx2, {
-              // The type of chart we want to create
-              type: 'line',
-              // The data for our dataset
-              data: {
-                labels: labelsCompare,
-                datasets: [{
-                  label: "Moyenne",
-                  borderColor: '#81ecec',
-                  backgroundColor: ['transparent'],
-                  borderWidth: 1,
-                  data: dataCompare
-                }, {
-                  label: "Perso",
-                  borderColor: '#74b9ff',
-                  backgroundColor: ['transparent'],
-                  borderWidth: 1,
-                  data: dataPerso
-                }, {
-                  label: "Minimum",
-                  borderColor: '#ff7675',
-                  backgroundColor: ['transparent'],
-                  borderWidth: 1,
-                  data: dataCompareMax
-                }, {
-                  label: "Maximum",
-                  borderColor: '#ffeaa7',
-                  backgroundColor: ['transparent'],
-                  borderWidth: 1,
-                  data: dataCompareMin
-                }]
-              },
-              // Configuration options go here
-              options: {
-                scales: {
-                  yAxes: [{
-                    ticks: {
-                      beginAtZero: false,
-                      callback: function callback(value, index, values) {
-                        return sectomin2(value);
-                      }
-                    }
-                  }]
-                }
-              }
-            });
-            ctx3 = document.getElementById('myChart3').getContext('2d');
-            prog = res.data.data.progress.map(function (el) {
-              return el.time;
+            progMin = res.data.data.marges.map(function (el) {
+              return el.minRanking;
             });
             seasonProg = res.data.data.progress.map(function (el) {
               return el.season;
             });
-            console.log(prog, seasonProg);
+            console.log(prog, progAvg, progMax, progMin, seasonProg);
             chart = new Chart(ctx3, {
               // The type of chart we want to create
               type: 'line',
@@ -9012,10 +9070,31 @@ function () {
                 labels: seasonProg,
                 datasets: [{
                   label: "".concat(distance, " ").concat(name),
-                  borderColor: '#81ecec',
+                  borderColor: '#74b9ff',
                   backgroundColor: ['transparent'],
                   borderWidth: 1,
                   data: prog
+                }, {
+                  label: 'Maximum',
+                  borderColor: '#ffeaa7',
+                  backgroundColor: ['transparent'],
+                  borderWidth: 1,
+                  data: progMax,
+                  hidden: true
+                }, {
+                  label: 'Moyenne',
+                  borderColor: '#81ecec',
+                  backgroundColor: ['transparent'],
+                  borderWidth: 1,
+                  data: progAvg,
+                  hidden: true
+                }, {
+                  label: 'Minimum',
+                  borderColor: '#ff7675',
+                  backgroundColor: ['transparent'],
+                  borderWidth: 1,
+                  data: progMin,
+                  hidden: true
                 }]
               },
               // Configuration options go here
@@ -9025,7 +9104,7 @@ function () {
                     ticks: {
                       beginAtZero: false,
                       callback: function callback(value, index, values) {
-                        return sectomin2(value);
+                        return "".concat(value > 0 ? '+' : '').concat(value, "%");
                       }
                     }
                   }]
@@ -9033,7 +9112,7 @@ function () {
               }
             });
 
-          case 46:
+          case 42:
           case "end":
             return _context.stop();
         }

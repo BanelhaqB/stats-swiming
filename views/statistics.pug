@@ -55,9 +55,15 @@ block content
                 .admin-nav
                     h5.admin-nav__heading Comparaison
                     select#compareBy.form__input.filter__item(name="compareBy")
-                        option(value='sex') Sexe
-                        option(value='group') Groupe
                         option(value='age') Âge
+                        option(value='category') Catégorie
+
+                    select.form__input.filter__item
+                        option(value='#') Club
+                        option(value='#') Groupe
+                        option(value='#') Département
+                        option(value='#') Région
+                        option(value='#') France
 
                     a#getCompareStatsBtn.btn-me-secondary-me-white.u-center-item.u-margin-top-medium Valider &rarr;
 
@@ -68,7 +74,7 @@ block content
                     .stats
                         .stats__graph
                             canvas#myChart 
-                            //- script const ctx = document.getElementById('myChart').getContext('2d');const chart = () => new Chart(ctx, { type: 'line',data: {labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],datasets: [{label: `${stats.race.name}`,borderColor: '#81ecec',data: [0, 10, 5, 2, 20, 30, 45]}]}}); window.onload = chart;
+                            //- script var ctx = document.getElementById('myChart').getContext('2d');const chart = () => new Chart(ctx, { type: 'line',data: {labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],datasets: [{label: `${stats.race.name}`,borderColor: '#81ecec',data: [0, 10, 5, 2, 20, 30, 45]}]}}); window.onload = chart;
 
                         .stats__card
                             .stats__card-header 
@@ -87,9 +93,9 @@ block content
                         .stats__graph
                             canvas#myChart3
                     
-                    .stats
-                        .stats__graph
-                            canvas#myChart2 
+                    //- .stats
+                    //-     .stats__graph
+                    //-         canvas#myChart2 
 
                     
                             //- script const ctx = document.getElementById('myChart').getContext('2d');const chart = () => new Chart(ctx, { type: 'line',data: {labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],datasets: [{label: `${stats.race.name}`,borderColor: '#81ecec',data: [0, 10, 5, 2, 20, 30, 45]}]}}); window.onload = chart;
