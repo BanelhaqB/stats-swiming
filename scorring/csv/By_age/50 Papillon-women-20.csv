@@ -1,0 +1,5 @@
+"","X.1","X","race","sex","lastname","firstname","birthyear","clubcode","club","nation","size","rankingtime","rankingdate","rankingplace","season","relay","age","time_Seconds"
+"1",50,139,"50 Papillon",FALSE,"LESAGE","C�line",1991,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:00:30.80","05/03/2011","COLOMBES",2011,0,20,30.8
+"2",189,508,"50 Papillon",FALSE,"LESAGE","Cйline",1991,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:00:30.80","05/03/2011","COLOMBES",2011,0,20,30.8
+"3",314,774,"50 Papillon",FALSE,"BATILLIOT","Laure",1999,11309500383,"CERGY PONTOISE NATATION","FRA",25,"00:00:32.42","24/11/2018","SARCELLES",2019,0,20,32.42
+"4",351,897,"50 Papillon",FALSE,"BATILLIOT","Laure",1999,11309500383,"CERGY PONTOISE NATATION","FRA",50,"00:00:33.73","02/02/2019","SARCELLES",2019,0,20,33.73

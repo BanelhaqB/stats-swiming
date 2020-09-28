@@ -7,6 +7,7 @@ class appError extends Error {
     this.isOperational = true;
 
     Error.captureStackTrace(this, this.constructor);
+    console.log(`Error :: ${message}`);
   }
 }
 

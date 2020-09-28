@@ -8836,47 +8836,61 @@ var getPersonalStats =
 function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee(distance, name, compareBy, student) {
+  regeneratorRuntime.mark(function _callee(distance, name, compareBy, compareOn, student) {
     var res, labels, data, dataAvg, dataMax, dataMin, ctx, chart, avg, med, fstQ, trdQ, max, min, ctx3, prog, progAvg, progMax, progMin, seasonProg;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            // -- API Request --
+            // -- API Request --``
+            console.log('reefe');
             console.log(student ? 1 : 2);
+            _context.prev = 2;
 
             if (!student) {
-              _context.next = 7;
+              _context.next = 9;
               break;
             }
 
-            _context.next = 4;
+            _context.next = 6;
             return (0, _axios.default)({
               method: 'GET',
-              url: "/api/v1/races/stats/".concat(distance, "/").concat(name, "/").concat(compareBy, "/").concat(student)
+              url: "/api/v1/races/stats/".concat(distance, "/").concat(name, "/").concat(compareBy, "/").concat(compareOn, "/").concat(student)
             });
 
-          case 4:
+          case 6:
             res = _context.sent;
-            _context.next = 10;
+            _context.next = 12;
             break;
 
-          case 7:
-            _context.next = 9;
+          case 9:
+            _context.next = 11;
             return (0, _axios.default)({
               method: 'GET',
-              url: "/api/v1/races/stats/".concat(distance, "/").concat(name, "/").concat(compareBy)
+              url: "/api/v1/races/stats/".concat(distance, "/").concat(name, "/").concat(compareBy, "/").concat(compareOn)
             });
 
-          case 9:
+          case 11:
             res = _context.sent;
 
-          case 10:
-            console.log(res); // ------------------------------------------------------------------------------
+          case 12:
+            console.log(res);
+            _context.next = 19;
+            break;
+
+          case 15:
+            _context.prev = 15;
+            _context.t0 = _context["catch"](2);
+            console.log(_context.t0);
+            (0, _alerts.showAlert)('error', _context.t0.response.data.message);
+
+          case 19:
+            // if (res.data.data.data.status === 'fail') {
+            // }
+            // ------------------------------------------------------------------------------
             // -- Perso
             // ------------------------------------------------------------------------------
             // -- Labels --
-
             labels = res.data.data.racesPersoByDate.map(function (el) {
               return "".concat(new Date(Date.parse(el.races.date)).getUTCDay(), "/").concat(new Date(Date.parse(el.races.date)).getMonth() + 1, "/").concat(new Date(Date.parse(el.races.date)).getFullYear());
             }); // -- Data --
@@ -9112,15 +9126,15 @@ function () {
               }
             });
 
-          case 42:
+          case 50:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee);
+    }, _callee, null, [[2, 15]]);
   }));
 
-  return function getPersonalStats(_x, _x2, _x3, _x4) {
+  return function getPersonalStats(_x, _x2, _x3, _x4, _x5) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -9814,14 +9828,23 @@ var getStats = function getStats() {
   var distance = document.getElementById('distance').value;
   var name = document.getElementById('name').value;
   var compareBy = document.getElementById('compareBy').value;
+  var compareOn = document.getElementById('compareOn').value;
+  var graphs = document.getElementsByClassName('stats__graph--empty');
+  var charts = document.getElementsByClassName('stats__graph--chart');
   var url = new URL(window.location);
   var student = url.search.substring(1); // console.log(student ? 1 : 2);
 
   if (student) {
-    (0, _chart.getPersonalStats)(distance, name, compareBy, student);
+    (0, _chart.getPersonalStats)(distance, name, compareBy, compareOn, student);
   } else {
-    (0, _chart.getPersonalStats)(distance, name, compareBy);
-  }
+    (0, _chart.getPersonalStats)(distance, name, compareBy, compareOn);
+  } // console.log(1, charts[0].classList);
+
+
+  graphs[0].remove();
+  charts[0].classList.remove('stats__graph--chart');
+  graphs[0].remove();
+  charts[0].classList.remove('stats__graph--chart');
 };
 
 if (getPersonalStatsBtn && getCompareStatsBtn) {
@@ -9856,7 +9879,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50628" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50551" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

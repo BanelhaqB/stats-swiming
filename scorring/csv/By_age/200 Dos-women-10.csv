@@ -1,0 +1,4 @@
+"","X.1","X","race","sex","lastname","firstname","birthyear","clubcode","club","nation","size","rankingtime","rankingdate","rankingplace","season","relay","age","time_Seconds"
+"1",138,302,"200 Dos",FALSE,"ZOUAREG","Anna",2008,11309500383,"CERGY PONTOISE NATATION","FRA",25,"00:04:26.48","12/11/2017","CERGY-PONTOISE",2018,0,10,266.48
+"2",150,314,"200 Dos",FALSE,"BARYALAI","Nadia",2009,11309500383,"CERGY PONTOISE NATATION","FRA",25,"00:04:00.00","11/11/2018","CERGY-PONTOISE",2019,0,10,240
+"3",152,316,"200 Dos",FALSE,"RUSTUEL","Charline",2009,11309500383,"CERGY PONTOISE NATATION","FRA",25,"00:03:47.09","11/11/2018","CERGY-PONTOISE",2019,0,10,227.09

@@ -5,22 +5,49 @@
   padding: 0;
   box-sizing: inherit;
 }
-
 html {
-  // This defines what 1rem is
-  font-size: 62.5%; //1 rem = 10px; 10px/16px = 62.5%
+  font-size: 62.5%;
 }
-
+@media only screen and (max-width: 75em) {
+  html {
+    font-size: 56.25%;
+  }
+}
+@media only screen and (max-width: 56.25em) {
+  html {
+    font-size: 50%;
+  }
+}
+@media only screen and (min-width: 112.5em) {
+  html {
+    font-size: 75%;
+  }
+}
 body {
   box-sizing: border-box;
+  padding: 3rem;
 }
-
+@media only screen and (max-width: 56.25em) {
+  body {
+    padding: 0;
+  }
+}
+body {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #777;
+}
 main {
-  min-height: 80vh;
-  margin-top: $header-height;
+  min-height: 90vh;
 }
 
-i {
-  text-decoration: none;
-  color: auto !important;
+::-moz-selection {
+  background-color: #559cc5;
+  color: #fff;
+}
+
+::selection {
+  background-color: #559cc5;
+  color: #fff;
 }

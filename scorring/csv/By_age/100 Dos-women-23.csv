@@ -1,0 +1,5 @@
+"","X.1","X","race","sex","lastname","firstname","birthyear","clubcode","club","nation","size","rankingtime","rankingdate","rankingplace","season","relay","age","time_Seconds"
+"1",14,33,"100 Dos",FALSE,"CAUCHARD","Laure",1983,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:01:15.98","25/06/2006","PARIS",2006,0,23,75.98
+"2",19,43,"100 Dos",FALSE,"LEROUX","Marion",1984,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:01:17.63","01/07/2007","SARCELLES",2007,0,23,77.63
+"3",117,280,"100 Dos",FALSE,"CAUCHARD","Laure",1983,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:01:15.98","25/06/2006","PARIS",2006,0,23,75.98
+"4",122,290,"100 Dos",FALSE,"LEROUX","Marion",1984,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:01:17.63","01/07/2007","SARCELLES",2007,0,23,77.63

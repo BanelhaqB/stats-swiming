@@ -1,0 +1,5 @@
+"","X.1","X","race","sex","lastname","firstname","birthyear","clubcode","club","nation","size","rankingtime","rankingdate","rankingplace","season","relay","age","time_Seconds"
+"1",4,5,"800 Nage Libre",FALSE,"CAUCHARD","Laure",1983,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:10:09.72","25/06/2005","PARIS",2005,0,22,609.72
+"2",5,6,"800 Nage Libre",FALSE,"CAUCHARD","Floriane",1983,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:10:27.38","19/12/2004","GRAND-COURONNE",2005,0,22,627.38
+"3",41,62,"800 Nage Libre",FALSE,"CAUCHARD","Laure",1983,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:10:09.72","25/06/2005","PARIS",2005,0,22,609.72
+"4",42,63,"800 Nage Libre",FALSE,"CAUCHARD","Floriane",1983,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:10:27.38","19/12/2004","GRAND-COURONNE",2005,0,22,627.38

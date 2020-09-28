@@ -32,22 +32,38 @@ function addData(chart, label, data) {
   chart.update();
 }
 
-export const getPersonalStats = async (distance, name, compareBy, student) => {
-  // -- API Request --
+export const getPersonalStats = async (
+  distance,
+  name,
+  compareBy,
+  compareOn,
+  student
+) => {
+  // -- API Request --``
+  console.log('reefe');
   console.log(student ? 1 : 2);
+
   let res;
-  if (student) {
-    res = await axios({
-      method: 'GET',
-      url: `/api/v1/races/stats/${distance}/${name}/${compareBy}/${student}`
-    });
-  } else {
-    res = await axios({
-      method: 'GET',
-      url: `/api/v1/races/stats/${distance}/${name}/${compareBy}`
-    });
+  try {
+    if (student) {
+      res = await axios({
+        method: 'GET',
+        url: `/api/v1/races/stats/${distance}/${name}/${compareBy}/${compareOn}/${student}`
+      });
+    } else {
+      res = await axios({
+        method: 'GET',
+        url: `/api/v1/races/stats/${distance}/${name}/${compareBy}/${compareOn}`
+      });
+    }
+    console.log(res);
+  } catch (err) {
+    console.log(err);
+    showAlert('error', err.response.data.message);
   }
-  console.log(res);
+
+  // if (res.data.data.data.status === 'fail') {
+  // }
 
   // ------------------------------------------------------------------------------
   // -- Perso

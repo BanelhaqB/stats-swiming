@@ -11,7 +11,7 @@ block content
     main.main
         .user-view
             nav.user-view__menu
-                a.laptop__back(href='/')
+                a.go-back(href='/')
                     span.emoji-left &#x1F448; Retour
                 ul.side-nav
                     +navItem('/me','Profil','users')
@@ -51,47 +51,64 @@ block content
                             option(value='4 nages') 4 nages
                             option(value='relais nage libre') relais nage libre
                             option(value='relais 4 nages') relais 4 nages
-                        a#getPersonalStats.btn-me-secondary-me-white.u-center-item.u-margin-top-medium.submitFilters Valider &rarr;
+                        a#getPersonalStats.btn-secondary-white.u-center-item.u-margin-top-medium.submitFilters Valider &rarr;
                 .admin-nav
                     h5.admin-nav__heading Comparaison
                     select#compareBy.form__input.filter__item(name="compareBy")
                         option(value='age') Âge
                         option(value='category') Catégorie
 
-                    select.form__input.filter__item
-                        option(value='#') Club
-                        option(value='#') Groupe
-                        option(value='#') Département
-                        option(value='#') Région
-                        option(value='#') France
+                    select#compareOn.form__input.filter__item
+                        option(value='club') Club
+                        option(value='group') Groupe
+                        option(value='country') France
 
-                    a#getCompareStatsBtn.btn-me-secondary-me-white.u-center-item.u-margin-top-medium Valider &rarr;
+                    a#getCompareStatsBtn.btn-secondary-white.u-center-item.u-margin-top-medium Valider &rarr;
 
 
             .user-view__content
                 .manageUsers__container
-                    h2.heading-secondary.ma-bt-md Statistiques
-                    .stats
-                        .stats__graph
-                            canvas#myChart 
-                            //- script var ctx = document.getElementById('myChart').getContext('2d');const chart = () => new Chart(ctx, { type: 'line',data: {labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],datasets: [{label: `${stats.race.name}`,borderColor: '#81ecec',data: [0, 10, 5, 2, 20, 30, 45]}]}}); window.onload = chart;
+                    h2.heading-secondary.heading-secondary--small.ma-bt-md Statistiques
+                    .box
+                        .stats.stats-1
+                            .stats__graph
+                                .stats__graph--empty
+                                    a.stats__graph--text Selectionnez une course pour voir les performances
+                                canvas#myChart.stats__graph--chart
+                                //- script var ctx = document.getElementById('myChart').getContext('2d');const chart = () => new Chart(ctx, { type: 'line',data: {labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],datasets: [{label: `${stats.race.name}`,borderColor: '#81ecec',data: [0, 10, 5, 2, 20, 30, 45]}]}}); window.onload = chart;
 
                         .stats__card
+                            //- .card__side.card__side--front.card__side--front-2
+                            //-     h4.card__heading
+                            //-         span.card__heading-span.card__heading-span--2 #{user.firstName}
+                            //-     .card__details
+                            //-         ul
+                            //-             li#nbRatings Nombre de course:  --
+                            //-             li#avg Temps moyen:  -- 
+                            //-             li#med Médiane:  --
+                            //-             li#fstQ 1er Quartiles:  -- 
+                            //-             li#trdQ 3ème Quartiles:  --
+                            //-             li#max Reccord:  -- 
+                            //-             li#min Minimum:  --
                             .stats__card-header 
-                                span.stats__card-header--name Célia
+                                span.stats__card-header--name #{user.firstName}
                                 span#nameRace.stats__card-header--race --
                             .stats__card-body
                                 ul.stats__card-body--list
-                                    li#nbRatings Nombre de course:  --
-                                    li#avg Temps moyen:  -- 
-                                    li#med Médiane:  --
-                                    li#fstQ 1er Quartiles:  -- 
-                                    li#trdQ 3ème Quartiles:  --
-                                    li#max Reccord:  -- 
-                                    li#min Minimum:  --
-                    .stats
-                        .stats__graph
-                            canvas#myChart3
+                                    li#nbRatings.stats__card-body--list-item Nombre de course:  --
+                                    li#avg.stats__card-body--list-item Temps moyen:  -- 
+                                    li#med.stats__card-body--list-item Médiane:  --
+                                    li#fstQ.stats__card-body--list-item(style='display:none') 1er Quartiles:  -- 
+                                    li#trdQ.stats__card-body--list-item(style='display:none') 3ème Quartiles:  --
+                                    li#max.stats__card-body--list-item Reccord:  -- 
+                                    li#min.stats__card-body--list-item Minimum:  --
+                            
+                                
+                        .stats.stats-2
+                            .stats__graph
+                                .stats__graph--empty
+                                    a.stats__graph--text Selectionnez une course pour voir les marges d'améliroation
+                                canvas#myChart3.stats__graph--chart
                     
                     //- .stats
                     //-     .stats__graph

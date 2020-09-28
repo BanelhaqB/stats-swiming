@@ -1,8 +1,15 @@
 .stats {
   display: flex;
   justify-content: space-between;
+  grid-column: 1 / 2;
+  &-1 {
+    grid-row: 1 / 2;
+  }
+  &-2 {
+    grid-row: 2 / 3;
+  }
   &__graph {
-    width: 73%;
+    width: 90%;
     height: fit-content;
     margin-top: 4rem;
     padding: 1rem;
@@ -10,68 +17,121 @@
     border-radius: 1rem;
     box-shadow: 0 0rem 5rem rgba(0, 0, 0, 0.15);
     // animation: open 1s;
+
+    &--empty {
+      height: 35rem !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &--text {
+      &,
+      &:link,
+      &:visited {
+        font-size: 1.6rem;
+        padding: 0.4rem 2rem;
+        border-radius: 1rem;
+        display: inline-block;
+        text-decoration: none;
+        position: relative;
+        -webkit-transition: all 0.4s;
+        transition: all 0.4s;
+        font-weight: 400;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        /*Add later when we use this for the button in form*/
+        border: none;
+        background-color: #5eaff6;
+        color: $color-white;
+      }
+      // height: 3rem;
+    }
+
+    &--chart {
+      height: 0;
+    }
   }
 
   &__card {
-    width: 20%;
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    background-color: #fff;
+    width: 100%;
     height: fit-content;
     margin-top: 4rem;
     // background-color: #f1f2f6;
-    border-radius: 1rem;
-    box-shadow: 0 0rem 5rem rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+    overflow: hidden;
 
     &-header {
-      width: 100%;
-      height: 5rem;
-      border-top-left-radius: inherit;
-      border-top-right-radius: inherit;
-
-      background-image: -webkit-gradient(
-        linear,
-        left top,
-        right bottom,
-        from($color-secondary-light),
-        to($color-secondary-dark)
-      );
-      background-image: linear-gradient(
-        to right bottom,
-        $color-secondary-light,
-        $color-secondary-dark
-      );
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
 
       &--name {
-        display: block;
-        width: fit-content;
+        margin-top: 2rem;
+        display: inline;
+        font-size: 1.8rem;
+        font-weight: 300;
         text-transform: uppercase;
-        color: $color-white;
-        font-size: 2rem;
-        font-weight: 700;
-        margin: auto;
+        text-align: right;
+        color: #fff;
+        width: fit-content;
+        padding: 1rem 1.5rem;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+        background-image: linear-gradient(
+          to right bottom,
+          rgba(41, 152, 255, 0.85),
+          rgba(86, 67, 250, 0.85)
+        );
       }
 
       &--race {
+        margin-top: -5px;
         display: block;
+        font-size: 1.8rem;
+        font-weight: 300;
+        text-align: right;
+        color: #fff;
         width: fit-content;
-        color: $color-white;
-        font-size: 1rem;
-        font-weight: 400;
-        font-style: italic;
-        margin: auto;
+        padding: 1rem 1.5rem;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+        background-image: linear-gradient(
+          to right bottom,
+          rgba(41, 152, 255, 0.85),
+          rgba(86, 67, 250, 0.85)
+        );
       }
     }
 
     &-body {
+      padding: 3rem;
       &--list {
-        padding: 2rem 1rem;
-        list-style: none;
-        font-weight: 400;
+        list-style: none !important;
+        width: 95% !important;
+        margin: 0 auto !important;
 
-        &li {
+        &-item {
+          text-align: center !important;
+          font-size: 1.5rem !important;
+          padding: 1rem !important;
+
           &:not(:last-child) {
-            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee !important;
           }
         }
       }
     }
   }
+}
+
+.box {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0;
 }

@@ -11,7 +11,7 @@ block content
     main.main
         .user-view
             nav.user-view__menu
-                a.laptop__back(href='/')
+                a.go-back(href='/')
                     span.emoji-left &#x1F448; Retour
                 ul.side-nav
                     +navItem('/me','Profil','users')
@@ -50,18 +50,18 @@ block content
                                         option(value=`${teacher._id}`)= `${teacher.firstName.charAt(0).toUpperCase()}${teacher.firstName.substring(1).toLowerCase()} ${teacher.lastName.toUpperCase()}`
                             input#birthYear.form__input.filter__item(type="number", placeholder="Année de naissance")
                             
-                            a.btn-me-secondary-me-white.u-center-item.u-margin-top-medium.submitFilters Appliquer les filtres &rarr;
+                            a.btn-secondary-white.u-center-item.u-margin-top-medium.submitFilters Appliquer les filtres &rarr;
 
 
             .user-view__content
                 .manageUsers__container
-                    h2.heading-secondary.ma-bt-md Gestion des utilisateurs
+                    h2.heading-secondary.heading-secondary--small.ma-bt-md Gestion des utilisateurs
                     .search
                         input#search_name.search__input(type='text', placeholder='Rechercher utilisateurs')
                         button.search__button
                             svg.search__icon.submitFilters
                                 use(xlink:href='img/sprite.svg#icon-magnifying-glass')
-                        a.btn-me-secondary-me.u-margin-left-medium.submitFilters Tout afficher &rarr;
+                        a.btn-secondary.u-margin-left-medium.submitFilters Tout afficher &rarr;
                     table.list.u-margin-top-medium
                         thead.list__head
                             tr
@@ -94,9 +94,9 @@ block content
                                                 use(xlink:href='img/sprite.svg#icon-adjustments')
                     .pagination              
                         if page !== 1
-                            a#prevPage.btn-me-secondary-me.pagination__btn= `← Page ${page - 1}`
+                            a#prevPage.btn-secondary.pagination__btn= `← Page ${page - 1}`
                         if results === 10 && results !== 0
-                            a#nextPage.btn-me-secondary-me.pagination__btn= `Page ${page + 1} →`
+                            a#nextPage.btn-secondary.pagination__btn= `Page ${page + 1} →`
 
                                               
 

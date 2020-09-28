@@ -1,0 +1,5 @@
+"","X.1","X","race","sex","lastname","firstname","birthyear","clubcode","club","nation","size","rankingtime","rankingdate","rankingplace","season","relay","age","time_Seconds"
+"1",4,7,"200 Dos",FALSE,"LEROUX","Marion",1984,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:02:30.61","15/03/2003","COLOMBES",2003,0,19,150.61
+"2",65,141,"200 Dos",FALSE,"CLERC","Celia",1997,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:02:29.05","20/02/2016","COURBEVOIE",2016,0,19,149.05
+"3",71,156,"200 Dos",FALSE,"LEROUX","Marion",1984,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:02:30.61","15/03/2003","COLOMBES",2003,0,19,150.61
+"4",132,290,"200 Dos",FALSE,"CLERC","Celia",1997,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:02:29.05","20/02/2016","COURBEVOIE",2016,0,19,149.05

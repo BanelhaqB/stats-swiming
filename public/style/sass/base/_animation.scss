@@ -45,17 +45,11 @@
 @keyframes moveInBottom {
   0% {
     opacity: 0;
-    transform: translate(-50%, -10vh);
+    transform: translateY(10vh);
   }
-
-  20% {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-
   100% {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translateY(0);
   }
 }
 

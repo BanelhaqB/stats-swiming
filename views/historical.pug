@@ -11,7 +11,7 @@ block content
     main.main
         .user-view
             nav.user-view__menu
-                a.laptop__back(href='/')
+                a.go-back(href='/')
                     span.emoji-left &#x1F448; Retour
                 ul.side-nav
                     +navItem('/me','Profil','users')
@@ -59,12 +59,12 @@ block content
                                 option(value='50') 50 mètres
                             input#season.form__input.filter__item(type="number", placeholder="Saison")
                             
-                            a.btn-me-secondary-me-white.u-center-item.u-margin-top-medium.racesFilterBtn Appliquer les filtres &rarr;
+                            a.btn-secondary-white.u-center-item.u-margin-top-medium.racesFilterBtn Appliquer les filtres &rarr;
 
 
             .user-view__content
                 .manageUsers__container
-                    h2.heading-secondary.ma-bt-md Historique
+                    h2.heading-secondary.heading-secondary--small.ma-bt-md Historique
                     .search
                         input#search_name.search__input(type='text', placeholder='Rechercher une course')
                         button.search__button
@@ -95,6 +95,6 @@ block content
                                     td #{race.races.season}
                     .pagination              
                         if page !== 1
-                            a#prevPage.btn-me-secondary-me.pagination__btn= `← Page ${page - 1}`
+                            a#prevPage.btn-secondary.pagination__btn= `← Page ${page - 1}`
                         if results === 10 && results !== 0
-                            a#nextPage.btn-me-secondary-me.pagination__btn= `Page ${page + 1} →`
+                            a#nextPage.btn-secondary.pagination__btn= `Page ${page + 1} →`

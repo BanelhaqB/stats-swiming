@@ -12,7 +12,7 @@ block content
         .user-view
             
             nav.user-view__menu
-                a.laptop__back(href='/')
+                a.go-back(href='/')
                     span.emoji-left &#x1F448; Retour
                 ul.side-nav
                     if userAccountData
@@ -40,7 +40,7 @@ block content
 
             .user-view__content
                 .user-view__form-container
-                    h2.heading-secondary.ma-bt-md= `${!userAccountData ? 'Votre Profil' : 'Mise à jour du profil'}`
+                    h2.heading-secondary.heading-secondary--small.ma-bt-md= `${!userAccountData ? 'Votre Profil' : 'Mise à jour du profil'}`
                     //- form.form.form-user-data(action='/submit-user-data' method='POST' enctype='multipart/form-data') //- -- Without API
                     form.form.form-user-data
                         .form__group
@@ -86,12 +86,12 @@ block content
                         .form__group(style='display: flex; justify-content: space-between;')
                             if userAccount
                                 button(type="submit",style="background-color: #d63031;")#deleteBtn.btn.btn--small.btn--green Supprimer
-                            button(type="submit").btn.btn--small.btn--green Enregistrer
+                            button(type="submit").btn.btn-small.btn--blue Enregistrer
 
                 if !userAccount
                     .line &nbsp;
                     .user-view__form-container
-                        h2.heading-secondary.ma-bt-md Changement de mot de passe
+                        h2.heading-secondary.heading-secondary--small.ma-bt-md Changement de mot de passe
                         form.form.form-user-password
                             .form__group
                                 label.form__label(for='password-current') Mot de passe actuel
@@ -103,4 +103,4 @@ block content
                                 label.form__label(for='password-confirm') Confirmez votre mot de passe
                                 input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
                             .form__group.right
-                                button.btn.btn--small.btn--green#btn--save-password Enregistrer
+                                button.btn.btn-small.btn--blue#btn--save-password Enregistrer

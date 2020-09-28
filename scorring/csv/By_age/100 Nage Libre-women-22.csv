@@ -1,0 +1,5 @@
+"","X.1","X","race","sex","lastname","firstname","birthyear","clubcode","club","nation","size","rankingtime","rankingdate","rankingplace","season","relay","age","time_Seconds"
+"1",6,24,"100 Nage Libre",FALSE,"CAUCHARD","Floriane",1983,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:01:03.53","19/06/2005","PARIS",2005,0,22,63.53
+"2",99,245,"100 Nage Libre",FALSE,"LESAGE","C�line",1991,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:01:04.72","26/05/2013","PARIS",2013,0,22,64.72
+"3",190,492,"100 Nage Libre",FALSE,"CAUCHARD","Floriane",1983,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:01:03.53","19/06/2005","PARIS",2005,0,22,63.53
+"4",283,713,"100 Nage Libre",FALSE,"LESAGE","Cйline",1991,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:01:04.72","26/05/2013","PARIS",2013,0,22,64.72

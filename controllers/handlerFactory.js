@@ -2,12 +2,16 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-plusplus */
 /* eslint-disable prefer-destructuring */
+// const csvParser = require('csv-parser');
+const math = require('mathjs');
 const mongoose = require('mongoose');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const APIFeatures = require('./../utils/apiFeatures');
-const csvParser = require('csv-parser');
+
 const User = require('../models/userModel');
+const { sqrt, pi } = require('mathjs');
+const { join } = require('lodash');
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -274,7 +278,7 @@ const rules = function(req, user, race) {
   };
 };
 
-exports.stats = async (Model, req, next) => {
+exports.stats = async (Model, res, req, next) => {
   let userId = req.user.id;
 
   if (req.params.studentId) {
@@ -323,7 +327,13 @@ exports.stats = async (Model, req, next) => {
   ]);
 
   if (racesTimePerso.length === 0) {
-    return next(new AppError('No Race', 404));
+    // res.status(404);
+    return next(
+      new AppError(
+        `Pas de course effectuée au ${race.distance} ${race.name}`,
+        404
+      )
+    );
   }
 
   // get personal stats
@@ -358,6 +368,8 @@ exports.stats = async (Model, req, next) => {
     }
   ]);
 
+  // console.log(statsPerso);
+
   const persoStats = await Model.aggregate([
     {
       $unwind: '$races'
@@ -368,10 +380,13 @@ exports.stats = async (Model, req, next) => {
     {
       $project: {
         race: 1,
+        firstName: 1,
+        lastName: 1,
         'races._id': 1,
         'races.time': 1,
         'races.date': 1,
         'races.age': 1,
+        'races.season': 1,
         'races.category': 1
       }
     },
@@ -381,19 +396,41 @@ exports.stats = async (Model, req, next) => {
       }
     }
   ]);
+  // console.log(persoStats);
 
   //-- Stat of club
-  const clubStats = async by => {
+  const clubStats = async (by, on) => {
+    let match;
+    switch (on) {
+      case 'group':
+        match = {
+          'races.race': race,
+          teacher: ObjectId(user.teacher._id),
+          group: user.group
+        };
+        by = 'season';
+        break;
+      case 'club':
+        match = { sex: user.sex, 'races.race': race };
+        break;
+      default:
+        match = { sex: user.sex, 'races.race': race };
+        break;
+    }
+
+    // console.log(match);
     const data = await Model.aggregate([
       {
         $unwind: '$races'
       },
       {
-        $match: { sex: user.sex, 'races.race': race }
+        $match: match
       },
       {
         $project: {
           birthYear: 1,
+          firstName: 1,
+          lastName: 1,
           sex: 1,
           group: 1,
           teacher: 1,
@@ -422,19 +459,39 @@ exports.stats = async (Model, req, next) => {
       }
     ]);
 
-    console.log(req.params);
+    // console.log(req.params);
     return data;
   };
 
-  const datade = await clubStats(req.params.compareBy);
-  // console.log(1, datade);
+  const datade = await clubStats(req.params.compareBy, req.params.compareOn);
+  console.log(1, datade);
 
-  const joinDataCourse = by => {
+  const joinDataCourse = (by, on) => {
     const data = persoStats.map(course => {
       let obj;
       datade.forEach(age => {
-        const compareby =
-          by === 'category' ? course.races.category : course.races.age;
+        let compareby;
+        switch (by) {
+          case 'category':
+            compareby = course.races.category;
+            if (on === 'group') {
+              compareby = course.races.season;
+            }
+            break;
+          case 'age':
+            compareby = course.races.age;
+            if (on === 'group') {
+              compareby = course.races.season;
+            }
+            break;
+          default:
+            compareby = course.races.age;
+            if (on === 'group') {
+              compareby = course.races.season;
+            }
+            break;
+        }
+
         if (compareby === age._id) {
           obj = {
             _id: course._id,
@@ -451,10 +508,35 @@ exports.stats = async (Model, req, next) => {
       });
       return obj;
     });
+    // console.log(on, data);
     return data;
   };
 
-  const margesClub = async by => {
+  const margesClub = async (by, on) => {
+    let match;
+    switch (on) {
+      case 'group':
+        match = {
+          'progress.k': `${race.distance} ${race.name}`,
+          teacher: ObjectId(user.teacher._id),
+          group: user.group
+        };
+        by = 'season';
+        break;
+      case 'club':
+        match = {
+          sex: user.sex,
+          'progress.k': `${race.distance} ${race.name}`
+        };
+        break;
+      default:
+        match = {
+          sex: user.sex,
+          'progress.k': `${race.distance} ${race.name}`
+        };
+        break;
+    }
+    // console.log(on, by, match);
     const data = await Model.aggregate([
       {
         $project: {
@@ -468,7 +550,7 @@ exports.stats = async (Model, req, next) => {
         $unwind: '$progress'
       },
       {
-        $match: { sex: user.sex, 'progress.k': `${race.distance} ${race.name}` }
+        $match: match
       },
       {
         $unwind: '$progress.v'
@@ -493,19 +575,44 @@ exports.stats = async (Model, req, next) => {
     ]);
 
     return data;
-    // console.log(data);
   };
 
-  const margesClubs = await margesClub(req.params.compareBy);
-  // console.log(margesClubs);
+  const margesClubs = await margesClub(
+    req.params.compareBy,
+    req.params.compareOn
+  );
+  // console.log(1, margesClubs);
 
-  const joinDataMarge = by => {
+  const joinDataMarge = (by, on) => {
+    // console.log(user.progress.get(`${race.distance} ${race.name}`));
     const data = user.progress
       .get(`${race.distance} ${race.name}`)
       .map(course => {
         let obj;
         margesClubs.forEach(age => {
-          const compareby = by === 'category' ? course.category : course.age;
+          // const compareby = by === 'category' ? course.category : course.age;
+          let compareby;
+          switch (by) {
+            case 'category':
+              compareby = course.category;
+              if (on === 'group') {
+                compareby = course.season;
+              }
+              break;
+            case 'age':
+              compareby = course.age;
+              if (on === 'group') {
+                compareby = course.season;
+              }
+              break;
+            default:
+              compareby = course.age;
+              if (on === 'group') {
+                compareby = course.season;
+              }
+              break;
+          }
+          // console.log(by, on, compareby);
           if (compareby === age._id) {
             obj = {
               _id: course._id,
@@ -522,9 +629,10 @@ exports.stats = async (Model, req, next) => {
         });
         return obj;
       });
+    // console.log(data);
     return data;
   };
-  // console.log(joinDataMarge('age'));
+  // console.log(2, joinDataMarge(req.params.compareBy, req.params.compareOn));
   // // ---- GRAPH -----
   // // -- Races sorted by date --
   // // -- Personal --
@@ -556,7 +664,7 @@ exports.stats = async (Model, req, next) => {
   //   user.progress.get(`${race.distance} ${race.name}`)
   // );
 
-  console.log(req.params.compareBy, joinDataCourse(req.params.compareBy));
+  // console.log(req.params.compareBy, joinDataCourse(req.params.compareBy));
   const data = {
     // compareBy: groupBy._id.substring(1),
     race,
@@ -569,9 +677,10 @@ exports.stats = async (Model, req, next) => {
     // statsByComapareByDates,
     records: user.records.get(`${race.distance} ${race.name}`),
     progress: user.progress.get(`${race.distance} ${race.name}`),
-    rankings: joinDataCourse(req.params.compareBy),
-    marges: joinDataMarge(req.params.compareBy)
+    rankings: joinDataCourse(req.params.compareBy, req.params.compareOn),
+    marges: joinDataMarge(req.params.compareBy, req.params.compareOn)
   };
+  console.log(data.statsPerso);
   return data;
   // res.status(200).json({
   //   status: 'success',
@@ -902,4 +1011,205 @@ exports.updateProgress = async (req, res, next) => {
 
   return users;
   // console.log(allIds);
+};
+
+const score = time => {
+  const absTime = Math.abs(time);
+  let score;
+
+  if (absTime > 1.285) {
+    if (time > 0) {
+      score = 1;
+    } else {
+      score = 10;
+    }
+  } else if (absTime > 0.843) {
+    if (time > 0) {
+      score = 2;
+    } else {
+      score = 9;
+    }
+  } else if (absTime > 0.525) {
+    if (time > 0) {
+      score = 3;
+    } else {
+      score = 8;
+    }
+  } else if (absTime > 0.255) {
+    if (time > 0) {
+      score = 4;
+    } else {
+      score = 7;
+    }
+  } else if (absTime > 0) {
+    if (time > 0) {
+      score = 5;
+    } else {
+      score = 6;
+    }
+  }
+
+  return score;
+};
+
+exports.scorring = async (req, res, next) => {
+  const races = [
+    '50 nage libre',
+    '50 dos',
+    '50 brasse',
+    '50 papillon',
+    '50 4 nages',
+    '100 nage libre',
+    '100 dos',
+    '100 brasse',
+    '100 papillon',
+    '100 4 nages',
+    '200 nage libre',
+    '200 dos',
+    '200 brasse',
+    '200 papillon',
+    '200 4 nages',
+    '400 nage libre',
+    '400 dos',
+    '400 brasse',
+    '400 papillon',
+    '400 4 nages',
+    '800 nage libre',
+    '800 dos',
+    '800 brasse',
+    '800 papillon',
+    '800 4 nages',
+    '1500 nage libre',
+    '1500 dos',
+    '1500 brasse',
+    '1500 papillon',
+    '1500 4 nages'
+  ];
+
+  for await (raceName of races) {
+    const club = req.params.support;
+    const sex = req.params.sex;
+    const age = req.params.age * 1;
+
+    const race = {
+      distance: parseInt(raceName.split(' ')[0], 10) || 50,
+      name:
+        raceName
+          .split(' ')
+          .slice(1)
+          .join(' ') || 'nage libre'
+    };
+
+    // console.log(club, sex, race, age);
+
+    const allRaces = await User.aggregate([
+      {
+        $match: { sex }
+      },
+      {
+        $unwind: '$races'
+      },
+      {
+        $match: { 'races.race': race }
+      },
+      {
+        $project: {
+          _id: 1,
+          sex: 1,
+          'races._id': 1,
+          'races.race': 1,
+          'races.time': 1,
+          'races.date': 1,
+          'races.season': 1,
+          'races.age': 1
+        }
+      },
+      {
+        $group: {
+          _id: '$races.age',
+          races: { $addToSet: '$races.time' },
+          racesID: { $addToSet: '$races._id' },
+          userID: { $addToSet: '$_id' }
+        }
+      },
+      {
+        $sort: {
+          _id: 1
+        }
+      }
+    ]);
+    // console.log(allRaces);
+    const data = allRaces.map(obj => {
+      return {
+        age: obj._id,
+        userID: obj.userID,
+        races: obj.races,
+        racesID: obj.racesID,
+        numRaces: obj.races.length,
+        esperence: math.mean(obj.races),
+        variance: math.variance(obj.races)
+        // densityFunction: x => {
+        //   (1 / sqrt(this.variance * 2 * 3.14)) *
+        //     Math.exp(((-1 / 2) * Math.pow(x - this.esperence)) / this.variance);
+        // }
+      };
+    });
+
+    const dataF = data.map(obj => {
+      return {
+        age: obj.age,
+        userID: obj.userID,
+        races: obj.races.map((race, index) => {
+          return {
+            raceID: obj.racesID[index],
+            time: race,
+            timeCR: (race - obj.esperence) / Math.sqrt(obj.variance),
+            score: score((race - obj.esperence) / Math.sqrt(obj.variance))
+          };
+        }),
+        // races: obj.races,
+        // racesCentreReduit: obj.races.map(
+        //   race => (race - obj.esperence) / Math.sqrt(obj.variance)
+        // ),
+        numRaces: obj.numRaces,
+        esperence: obj.esperence,
+        variance: obj.variance
+      };
+    });
+
+    // const dataFF = dataF.map(obj => {
+    //   return {
+    //     age: obj.age,
+    //     races: obj.races,
+    //     racesCentreReduit: obj.racesCentreReduit,
+    //     score
+    //     numRaces: obj.numRaces,
+    //     esperence: obj.esperence,
+    //     variance: obj.variance
+    //   };
+    // });
+
+    for await (ageSeg of dataF) {
+      console.log(ageSeg.age);
+      console.log(ageSeg.userID);
+      console.log(ageSeg.races);
+
+      for await (userID of ageSeg.userID) {
+        const user = await User.findById(userID);
+        // console.log(user);
+        user.races.forEach(userRace => {
+          ageSeg.races.forEach(race => {
+            if (userRace.time === race.time) {
+              userRace.score = race.score;
+            }
+          });
+        });
+
+        await User.findByIdAndUpdate(userID, user);
+      }
+    }
+  }
+
+  // console.log(club, dataF);
+  return dataF;
 };

@@ -6,9 +6,16 @@ const raceController = require('../controllers/raceController');
 const router = express.Router();
 router.use(authController.protect);
 
-router.get('/stats/:distance/:race/:compareBy', raceController.cardStats);
+router.post('/update/:IDRace', raceController.updateRace);
+
+router.get('/scorring/:support/:sex', raceController.scorring);
+
 router.get(
-  '/stats/:distance/:race/:compareBy/:studentId',
+  '/stats/:distance/:race/:compareBy/:compareOn',
+  raceController.cardStats
+);
+router.get(
+  '/stats/:distance/:race/:compareBy/:compareOn/:studentId',
   raceController.cardStats
 );
 

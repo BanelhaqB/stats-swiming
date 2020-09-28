@@ -14,7 +14,7 @@ exports.homePage = catchAsync(async (req, res, next) => {
 
 exports.getLoginForm = (req, res) => {
   res.status(200).render('login', {
-    title: 'Log into your account'
+    title: 'Connexion'
   });
 };
 

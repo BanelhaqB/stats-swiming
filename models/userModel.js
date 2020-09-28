@@ -137,6 +137,7 @@ const userSchema = new mongoose.Schema(
         },
         place: String,
         time: Number,
+        score: Number,
         size: {
           type: String,
           enum: ['25', '50']

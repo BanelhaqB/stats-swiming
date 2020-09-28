@@ -4,6 +4,7 @@ const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const Users = require('./../models/userModel');
 const factory = require('./handlerFactory');
+const csvParser = require('csv-parser');
 
 // ---------------------------------------------------------------
 // -- RACES SETTINGS
@@ -97,12 +98,14 @@ const rules = function(req, user, race) {
 };
 
 exports.cardStats = catchAsync(async (req, res, next) => {
-  const data = await factory.stats(Users, req, next);
-
-  res.status(200).json({
-    status: 'success',
-    data
-  });
+  const data = await factory.stats(Users, res, req, next);
+  // console.log(data);
+  if (data) {
+    res.status(200).json({
+      status: 'success',
+      data
+    });
+  }
 });
 
 exports.progress = catchAsync(async (req, res, next) => {
@@ -120,5 +123,23 @@ exports.updateProgress = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     users
+  });
+});
+
+exports.updateRace = catchAsync(async (req, res, next) => {
+  const race = await factory.updateOne(Users, req, next);
+
+  res.status(200).json({
+    status: 'success',
+    race
+  });
+});
+
+exports.scorring = catchAsync(async (req, res, next) => {
+  const msg = await factory.scorring(req, res, next);
+
+  res.status(200).json({
+    status: 'success',
+    msg
   });
 });

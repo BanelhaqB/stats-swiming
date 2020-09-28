@@ -1,31 +1,92 @@
-.form__error {
-
+.form {
+  &__error {
     outline: none !important;
     border: none !important;
     border-bottom: 1px solid red !important;
     box-shadow: none !important;
 
     &:focus {
-
-        &:invalid {
-            outline: none !important;
-            border: none !important;
-            border: 1px solid red !important;
-            box-shadow: none !important;
-        }
-        
+      &:invalid {
+        outline: none !important;
+        border: none !important;
+        border: 1px solid red !important;
+        box-shadow: none !important;
+      }
     }
 
     &:invalid {
-        border: 1px solid red !important;
+      border: 1px solid red !important;
     }
 
-    &-length{
-        &::after {
-            content: "Entrez entre 6 et 30 caractères";
-            display: block;
-            height: 2rem;
-            width: 100%;
-        }
+    &-length {
+      &::after {
+        content: 'Entrez entre 6 et 30 caractères';
+        display: block;
+        height: 2rem;
+        width: 100%;
+      }
     }
+  }
+
+  &__input {
+    display: block;
+    font-family: inherit;
+    font-size: 1.5rem;
+    color: inherit;
+    padding: 1.25rem 1.75rem;
+    border: none;
+    width: 100%;
+    background-color: #fff;
+    background-color: #f2f2f2;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    border-radius: 4px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    /* Pseudo element (a visible thing that isn't really in the DOM).
+          Also needs -ms- */
+
+    &:focus {
+      outline: none;
+      border-bottom: 3px solid #55c57a;
+    }
+    &:focus:invalid {
+      border-bottom: 3px solid #ff7730;
+    }
+    &::-webkit-input-placeholder {
+      color: #bbb;
+    }
+  }
+
+  &__group:not(:last-child) {
+    margin-bottom: 2.5rem;
+  }
+
+  &__label {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.form__input:placeholder-shown + .form__label {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s;
+  transform: translateY(-4rem);
+}
+
+.login-form {
+  margin: 0 auto;
+  max-width: 55rem;
+  margin-top: 50vh;
+  transform: translateY(-50%);
+  background-color: #fff;
+  -webkit-box-shadow: 0 2.5rem 8rem 2rem rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2.5rem 8rem 2rem rgba(0, 0, 0, 0.06);
+  padding: 5rem 7rem;
+  border-radius: 5px;
 }

@@ -239,16 +239,26 @@ const getStats = function() {
   const distance = document.getElementById('distance').value;
   const name = document.getElementById('name').value;
   const compareBy = document.getElementById('compareBy').value;
+  const compareOn = document.getElementById('compareOn').value;
+  const graphs = document.getElementsByClassName('stats__graph--empty');
+  const charts = document.getElementsByClassName('stats__graph--chart');
 
   let url = new URL(window.location);
   const student = url.search.substring(1);
   // console.log(student ? 1 : 2);
 
   if (student) {
-    getPersonalStats(distance, name, compareBy, student);
+    getPersonalStats(distance, name, compareBy, compareOn, student);
   } else {
-    getPersonalStats(distance, name, compareBy);
+    getPersonalStats(distance, name, compareBy, compareOn);
   }
+
+  // console.log(1, charts[0].classList);
+  graphs[0].remove();
+  charts[0].classList.remove('stats__graph--chart');
+
+  graphs[0].remove();
+  charts[0].classList.remove('stats__graph--chart');
 };
 
 if (getPersonalStatsBtn && getCompareStatsBtn) {

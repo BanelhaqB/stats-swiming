@@ -1,0 +1,5 @@
+"","X.1","X","race","sex","lastname","firstname","birthyear","clubcode","club","nation","size","rankingtime","rankingdate","rankingplace","season","relay","age","time_Seconds"
+"1",25,30,"50 Papillon","M","BARBEAUX","Franck",1979,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:00:28.00","29/05/2005","SARCELLES",2005,0,26,28
+"2",255,399,"50 Papillon","M","BARBEAUX","Franck",1979,130952432,"CERGY PONTOISE NATATION","FRA",50,"00:00:28.00","29/05/2005","SARCELLES",2005,0,26,28
+"3",493,828,"50 Papillon","M","VEDOVATI","Erwan",1992,11309500383,"CERGY PONTOISE NATATION","FRA",25,"00:00:28.27","17/06/2018","PONTOISE",2018,0,26,28.27
+"4",547,905,"50 Papillon","M","CAPITAINE","Thibaut",1993,11309500383,"CERGY PONTOISE NATATION","FRA",50,"00:00:26.42","25/01/2019","SARTROUVILLE",2019,0,26,26.42

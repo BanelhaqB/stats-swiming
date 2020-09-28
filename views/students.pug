@@ -11,7 +11,7 @@ block content
     main.main
         .user-view
             nav.user-view__menu
-                a.laptop__back(href='/')
+                a.go-back(href='/')
                     span.emoji-left &#x1F448; Retour
                 ul.side-nav
                     +navItem('/me','Profil','users')
@@ -41,12 +41,12 @@ block content
                             input#birthYear.form__input.filter__item(type="number", placeholder="Année de naissance")
                             input#group.form__input.filter__item(type="number", placeholder="Groupe")
                             
-                            a.submitForm.btn-me-secondary-me-white.u-center-item.u-margin-top-medium.submitFilters Appliquer les filtres &rarr;
+                            a.submitForm.btn-secondary-white.u-center-item.u-margin-top-medium.submitFilters Appliquer les filtres &rarr;
 
 
             .user-view__content
                 .manageUsers__container
-                    h2.heading-secondary.ma-bt-md Liste d'Élèves
+                    h2.heading-secondary.heading-secondary--small.ma-bt-md Liste d'Élèves
                     .search
                         input#search_name.search__input(type='text', placeholder='Rechercher un élève')
                         button.search__button
@@ -79,6 +79,6 @@ block content
                                                 use(xlink:href='/img/sprite.svg#icon-adjustments')
                     .pagination              
                         if page !== 1
-                            a#prevPage.btn-me-secondary-me.pagination__btn= `← Page ${page - 1}`
+                            a#prevPage.btn-secondary.pagination__btn= `← Page ${page - 1}`
                         if results === 10 && results !== 0
-                            a#nextPage.btn-me-secondary-me.pagination__btn= `Page ${page + 1} →`
+                            a#nextPage.btn-secondary.pagination__btn= `Page ${page + 1} →`
