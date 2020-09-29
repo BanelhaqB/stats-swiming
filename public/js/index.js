@@ -259,6 +259,9 @@ const getStats = function() {
 
   graphs[0].remove();
   charts[0].classList.remove('stats__graph--chart');
+
+  graphs[0].remove();
+  charts[0].classList.remove('stats__graph--chart');
 };
 
 if (getPersonalStatsBtn && getCompareStatsBtn) {

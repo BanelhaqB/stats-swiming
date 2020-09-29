@@ -57,6 +57,7 @@ block content
                     select#compareBy.form__input.filter__item(name="compareBy")
                         option(value='age') Âge
                         option(value='category') Catégorie
+                        option(value='globalScore') Performance
 
                     select#compareOn.form__input.filter__item
                         option(value='club') Club
@@ -102,6 +103,8 @@ block content
                                     li#trdQ.stats__card-body--list-item(style='display:none') 3ème Quartiles:  --
                                     li#max.stats__card-body--list-item Reccord:  -- 
                                     li#min.stats__card-body--list-item Minimum:  --
+                                    li#scoreMax.stats__card-body--list-item Note reccord:  -- 
+                                    li#scoreNow.stats__card-body--list-item Note actuelle:  --
                             
                                 
                         .stats.stats-2
@@ -109,6 +112,12 @@ block content
                                 .stats__graph--empty
                                     a.stats__graph--text Selectionnez une course pour voir les marges d'améliroation
                                 canvas#myChart3.stats__graph--chart
+                        
+                        .stats.stats-3
+                            .stats__graph
+                                .stats__graph--empty
+                                    a.stats__graph--text Selectionnez une course pour voir les marges d'améliroation
+                                canvas#myChart4.stats__graph--chart
                     
                     //- .stats
                     //-     .stats__graph

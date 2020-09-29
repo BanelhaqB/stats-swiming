@@ -79,10 +79,22 @@ export const getPersonalStats = async (
 
   // -- Data --
   const data = res.data.data.racesPersoByDate.map(el => -el.races.time);
+  const dataScore = res.data.data.racesPersoByDate.map(el => el.races.score);
+  const dataName = res.data.data.racesPersoByDate.map(
+    el => `${el.firstName} ${el.lastName}`
+  );
   const dataAvg = res.data.data.rankings.map(el => -el.avgRanking);
   const dataMax = res.data.data.rankings.map(el => -el.minRanking);
   const dataMin = res.data.data.rankings.map(el => -el.maxRanking);
-  console.log(data, dataAvg, dataMax, dataMin);
+  console.log(
+    'Information :',
+    data,
+    dataScore,
+    dataName,
+    dataAvg,
+    dataMax,
+    dataMin
+  );
   // -- Chart --
   var ctx = document.getElementById('myChart').getContext('2d');
   // removeData(ctx);
@@ -279,6 +291,9 @@ export const getPersonalStats = async (
       .toString()
       .split('.')[1]
   }`;
+  const scoreMax = Math.round(Math.max(...dataScore));
+  const scoreNow = dataScore[dataScore.length - 1];
+  console.log('score : ', dataScore, scoreMax, scoreNow);
 
   // -- Objects --
 
@@ -295,6 +310,12 @@ export const getPersonalStats = async (
   document.getElementById('trdQ').textContent = `3ème Quartiles:  ${trdQ}`;
   document.getElementById('max').textContent = `Reccord:  ${max}`;
   document.getElementById('min').textContent = `Minimum:  ${min}`;
+  document.getElementById(
+    'scoreMax'
+  ).textContent = `Note reccord:  ${scoreMax}`;
+  document.getElementById(
+    'scoreNow'
+  ).textContent = `Note actuelle:  ${scoreNow}`;
 
   // -- Label --
   // const labelsCompare = res.data.data.statsByComapareByDates.map(el => el._id);
@@ -444,6 +465,77 @@ export const getPersonalStats = async (
               callback: function(value, index, values) {
                 return `${value > 0 ? '+' : ''}${value}%`;
               }
+            }
+          }
+        ]
+      }
+    }
+  });
+
+  var ctx4 = document.getElementById('myChart4').getContext('2d');
+
+  // const data = res.data.data.racesPersoByDate.map(el => -el.races.time);
+  const dataAvgScore = res.data.data.rankings.map(el => el.avgScore);
+  const dataMaxScore = res.data.data.rankings.map(el => el.minScore);
+  const dataMinScore = res.data.data.rankings.map(el => el.maxScore);
+  console.log(dataAvgScore, dataMaxScore, dataMinScore);
+  // const prog = res.data.data.marges.map(el => el.pourcentage);
+  // const progAvg = res.data.data.marges.map(el => el.avgRanking);
+  // const progMax = res.data.data.marges.map(el => el.maxRanking);
+  // const progMin = res.data.data.marges.map(el => el.minRanking);
+  // const seasonProg = res.data.data.progress.map(el => el.season);
+  // console.log(prog, progAvg, progMax, progMin, seasonProg);
+  var chart = new Chart(ctx4, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+      labels,
+      datasets: [
+        {
+          label: `${distance} ${name}`,
+          borderColor: '#74b9ff',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: dataScore
+        },
+        {
+          label: 'Maximum',
+          borderColor: '#ffeaa7',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: dataMinScore,
+          hidden: true
+        },
+        {
+          label: 'Moyenne',
+          borderColor: '#81ecec',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: dataAvgScore,
+          hidden: true
+        },
+        {
+          label: 'Minimum',
+          borderColor: '#ff7675',
+          backgroundColor: ['transparent'],
+          borderWidth: 1,
+          data: dataMaxScore,
+          hidden: true
+        }
+      ]
+    },
+
+    // Configuration options go here
+    options: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              max: 10,
+              min: 0,
+              stepSize: 1
             }
           }
         ]

@@ -143,3 +143,12 @@ exports.scorring = catchAsync(async (req, res, next) => {
     msg
   });
 });
+
+exports.saveScorring = catchAsync(async (req, res, next) => {
+  const data = await factory.saveScorring(req, res, next);
+  console.log(data);
+  res.status(200).json({
+    status: 'success',
+    data
+  });
+});

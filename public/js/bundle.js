@@ -8805,6 +8805,14 @@ var _alerts = require("./alerts");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -8837,7 +8845,7 @@ function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(distance, name, compareBy, compareOn, student) {
-    var res, labels, data, dataAvg, dataMax, dataMin, ctx, chart, avg, med, fstQ, trdQ, max, min, ctx3, prog, progAvg, progMax, progMin, seasonProg;
+    var res, labels, data, dataScore, dataName, dataAvg, dataMax, dataMin, ctx, chart, avg, med, fstQ, trdQ, max, min, scoreMax, scoreNow, ctx3, prog, progAvg, progMax, progMin, seasonProg, ctx4, dataAvgScore, dataMaxScore, dataMinScore;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -8898,6 +8906,12 @@ function () {
             data = res.data.data.racesPersoByDate.map(function (el) {
               return -el.races.time;
             });
+            dataScore = res.data.data.racesPersoByDate.map(function (el) {
+              return el.races.score;
+            });
+            dataName = res.data.data.racesPersoByDate.map(function (el) {
+              return "".concat(el.firstName, " ").concat(el.lastName);
+            });
             dataAvg = res.data.data.rankings.map(function (el) {
               return -el.avgRanking;
             });
@@ -8907,7 +8921,7 @@ function () {
             dataMin = res.data.data.rankings.map(function (el) {
               return -el.maxRanking;
             });
-            console.log(data, dataAvg, dataMax, dataMin); // -- Chart --
+            console.log('Information :', data, dataScore, dataName, dataAvg, dataMax, dataMin); // -- Chart --
 
             ctx = document.getElementById('myChart').getContext('2d'); // removeData(ctx);
             // addData(ctx, labels, [data, dataAvg, dataMax, dataMin]);
@@ -8970,7 +8984,10 @@ function () {
             fstQ = "".concat(Math.trunc(res.data.data.MQ.fstQuartile / 60), "'").concat((Math.round((res.data.data.MQ.fstQuartile - Math.trunc(res.data.data.MQ.fstQuartile / 60) * 60) * 100) / 100).toString().split('.')[0], "\"").concat((Math.round((res.data.data.MQ.fstQuartile - Math.trunc(res.data.data.MQ.fstQuartile / 60) * 60) * 100) / 100).toString().split('.')[1]);
             trdQ = "".concat(Math.trunc(res.data.data.MQ.trdQuartile / 60), "'").concat((Math.round((res.data.data.MQ.trdQuartile - Math.trunc(res.data.data.MQ.trdQuartile / 60) * 60) * 100) / 100).toString().split('.')[0], "\"").concat((Math.round((res.data.data.MQ.trdQuartile - Math.trunc(res.data.data.MQ.trdQuartile / 60) * 60) * 100) / 100).toString().split('.')[1]);
             max = "".concat(Math.trunc(res.data.data.statsPerso[0].minRaking / 60), "'").concat((Math.round((res.data.data.statsPerso[0].minRaking - Math.trunc(res.data.data.statsPerso[0].minRaking / 60) * 60) * 100) / 100).toString().split('.')[0], "\"").concat((Math.round((res.data.data.statsPerso[0].minRaking - Math.trunc(res.data.data.statsPerso[0].minRaking / 60) * 60) * 100) / 100).toString().split('.')[1]);
-            min = "".concat(Math.trunc(res.data.data.statsPerso[0].maxRaking / 60), "'").concat((Math.round((res.data.data.statsPerso[0].maxRaking - Math.trunc(res.data.data.statsPerso[0].maxRaking / 60) * 60) * 100) / 100).toString().split('.')[0], "\"").concat((Math.round((res.data.data.statsPerso[0].maxRaking - Math.trunc(res.data.data.statsPerso[0].maxRaking / 60) * 60) * 100) / 100).toString().split('.')[1]); // -- Objects --
+            min = "".concat(Math.trunc(res.data.data.statsPerso[0].maxRaking / 60), "'").concat((Math.round((res.data.data.statsPerso[0].maxRaking - Math.trunc(res.data.data.statsPerso[0].maxRaking / 60) * 60) * 100) / 100).toString().split('.')[0], "\"").concat((Math.round((res.data.data.statsPerso[0].maxRaking - Math.trunc(res.data.data.statsPerso[0].maxRaking / 60) * 60) * 100) / 100).toString().split('.')[1]);
+            scoreMax = Math.round(Math.max.apply(Math, _toConsumableArray(dataScore)));
+            scoreNow = dataScore[dataScore.length - 1];
+            console.log('score : ', dataScore, scoreMax, scoreNow); // -- Objects --
 
             document.getElementById('nameRace').textContent = "".concat(res.data.data.race.distance, " ").concat(res.data.data.race.name);
             document.getElementById('nbRatings').textContent = "Nombre de course:  ".concat(res.data.data.statsPerso[0].numRankings);
@@ -8980,7 +8997,9 @@ function () {
             document.getElementById('fstQ').textContent = "1er Quartiles:  ".concat(fstQ);
             document.getElementById('trdQ').textContent = "3\xE8me Quartiles:  ".concat(trdQ);
             document.getElementById('max').textContent = "Reccord:  ".concat(max);
-            document.getElementById('min').textContent = "Minimum:  ".concat(min); // -- Label --
+            document.getElementById('min').textContent = "Minimum:  ".concat(min);
+            document.getElementById('scoreMax').textContent = "Note reccord:  ".concat(scoreMax);
+            document.getElementById('scoreNow').textContent = "Note actuelle:  ".concat(scoreNow); // -- Label --
             // const labelsCompare = res.data.data.statsByComapareByDates.map(el => el._id);
             // // -- Data --
             // const dataCompare = res.data.data.statsByComapareByDates.map(
@@ -9125,8 +9144,74 @@ function () {
                 }
               }
             });
+            ctx4 = document.getElementById('myChart4').getContext('2d'); // const data = res.data.data.racesPersoByDate.map(el => -el.races.time);
 
-          case 50:
+            dataAvgScore = res.data.data.rankings.map(function (el) {
+              return el.avgScore;
+            });
+            dataMaxScore = res.data.data.rankings.map(function (el) {
+              return el.minScore;
+            });
+            dataMinScore = res.data.data.rankings.map(function (el) {
+              return el.maxScore;
+            });
+            console.log(dataAvgScore, dataMaxScore, dataMinScore); // const prog = res.data.data.marges.map(el => el.pourcentage);
+            // const progAvg = res.data.data.marges.map(el => el.avgRanking);
+            // const progMax = res.data.data.marges.map(el => el.maxRanking);
+            // const progMin = res.data.data.marges.map(el => el.minRanking);
+            // const seasonProg = res.data.data.progress.map(el => el.season);
+            // console.log(prog, progAvg, progMax, progMin, seasonProg);
+
+            chart = new Chart(ctx4, {
+              // The type of chart we want to create
+              type: 'line',
+              // The data for our dataset
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: "".concat(distance, " ").concat(name),
+                  borderColor: '#74b9ff',
+                  backgroundColor: ['transparent'],
+                  borderWidth: 1,
+                  data: dataScore
+                }, {
+                  label: 'Maximum',
+                  borderColor: '#ffeaa7',
+                  backgroundColor: ['transparent'],
+                  borderWidth: 1,
+                  data: dataMinScore,
+                  hidden: true
+                }, {
+                  label: 'Moyenne',
+                  borderColor: '#81ecec',
+                  backgroundColor: ['transparent'],
+                  borderWidth: 1,
+                  data: dataAvgScore,
+                  hidden: true
+                }, {
+                  label: 'Minimum',
+                  borderColor: '#ff7675',
+                  backgroundColor: ['transparent'],
+                  borderWidth: 1,
+                  data: dataMaxScore,
+                  hidden: true
+                }]
+              },
+              // Configuration options go here
+              options: {
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      max: 10,
+                      min: 0,
+                      stepSize: 1
+                    }
+                  }]
+                }
+              }
+            });
+
+          case 63:
           case "end":
             return _context.stop();
         }
@@ -9845,6 +9930,8 @@ var getStats = function getStats() {
   charts[0].classList.remove('stats__graph--chart');
   graphs[0].remove();
   charts[0].classList.remove('stats__graph--chart');
+  graphs[0].remove();
+  charts[0].classList.remove('stats__graph--chart');
 };
 
 if (getPersonalStatsBtn && getCompareStatsBtn) {
@@ -9879,7 +9966,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50551" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63220" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -9,6 +9,7 @@ router.use(authController.protect);
 router.post('/update/:IDRace', raceController.updateRace);
 
 router.get('/scorring/:support/:sex', raceController.scorring);
+router.post('/scorring', raceController.saveScorring);
 
 router.get(
   '/stats/:distance/:race/:compareBy/:compareOn',

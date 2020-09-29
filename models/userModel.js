@@ -106,6 +106,10 @@ const userSchema = new mongoose.Schema(
         }
       ]
     },
+    scores: {
+      type: Map,
+      of: { best: Number, current: Number }
+    },
     races: [
       {
         race: {
@@ -138,6 +142,7 @@ const userSchema = new mongoose.Schema(
         place: String,
         time: Number,
         score: Number,
+        globalScore: Number,
         size: {
           type: String,
           enum: ['25', '50']
